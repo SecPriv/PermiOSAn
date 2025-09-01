@@ -1,0 +1,455 @@
+[
+  {
+    "permission_category": "Authentication",
+    "android_permissions": [
+      "CREDENTIAL_MANAGER_QUERY_CANDIDATE_CREDENTIALS",
+      "CREDENTIAL_MANAGER_SET_ALLOWED_PROVIDERS",
+      "CREDENTIAL_MANAGER_SET_ORIGIN"
+    ],
+    "ios_permissions": [
+      "com.apple.developer.authentication-services.autofill-credential-provider"
+    ]
+  },
+  {
+    "permission_category": "Bluetooth",
+    "android_permissions": [
+      "BLUETOOTH_ADVERTISE",
+      "BLUETOOTH_CONNECT",
+      "BLUETOOTH_SCAN",
+      "BLUETOOTH",
+      "BLUETOOTH_ADMIN"
+    ],
+    "ios_permissions": [
+      "NSBluetoothAlwaysUsageDescription"
+    ]
+  },
+  {
+    "permission_category": "Calendar",
+    "android_permissions": [
+      "READ_CALENDAR",
+      "WRITE_CALENDAR"
+    ],
+    "ios_permissions": [
+      "NSCalendarsFullAccessUsageDescription",
+      "NSCalendarsWriteOnlyAccessUsageDescription"
+    ]
+  },
+  {
+    "permission_category": "Telephony Services",
+    "android_permissions": [
+      "READ_CALL_LOG",
+      "ACCEPT_HANDOVER",
+      "ADD_VOICEMAIL",
+      "CALL_PHONE",
+      "WRITE_CALL_LOG",
+      "READ_PHONE_NUMBERS",
+      "ANSWER_PHONE_CALLS",
+      "CALL_COMPANION_APP",
+      "MANAGE_OWN_CALLS",
+      "FOREGROUND_SERVICE_PHONE_CALL",
+      "PROCESS_OUTGOING_CALLS"
+    ],
+    "ios_permissions": [
+      "com.apple.developer.calling-app",
+      "com.apple.developer.dialing-app",
+      "com.apple.CommCenter.fine-grained",
+      "com.apple.developer.networking.carrier-constrained.appcategory",
+      "com.apple.developer.networking.carrier-constrained.app-optimized"
+    ]
+  },
+  {
+    "permission_category": "Camera",
+    "android_permissions": [
+      "CAMERA",
+      "FOREGROUND_SERVICE_CAMERA"
+    ],
+    "ios_permissions": [
+      "NSCameraUsageDescription"
+    ]
+  },
+  {
+    "permission_category": "Microphone",
+    "android_permissions": [
+      "FOREGROUND_SERVICE_MICROPHONE",
+      "RECORD_AUDIO"
+    ],
+    "ios_permissions": [
+      "NSMicrophoneUsageDescription"
+    ]
+  },
+  {
+    "permission_category": "Contacts",
+    "android_permissions": [
+      "READ_CONTACTS",
+      "WRITE_CONTACTS"
+    ],
+    "ios_permissions": [
+      "NSContactsUsageDescription",
+      "com.apple.developer.contacts.notes"
+    ]
+  },
+  {
+    "permission_category": "Biometrics",
+    "android_permissions": [
+      "USE_BIOMETRIC"
+    ],
+    "ios_permissions": [
+      "NSFaceIDUsageDescription"
+    ]
+  },
+  {
+    "permission_category": "Health",
+    "android_permissions": [
+      "BODY_SENSORS",
+      "BODY_SENSORS_BACKGROUND",
+      "FOREGROUND_SERVICE_HEALTH",
+      "READ_ACTIVE_CALORIES_BURNED",
+      "READ_ACTIVITY_INTENSITY",
+      "READ_BASAL_BODY_TEMPERATURE",
+      "READ_BASAL_METABOLIC_RATE",
+      "READ_BLOOD_GLUCOSE",
+      "READ_BLOOD_PRESSURE",
+      "READ_BODY_FAT",
+      "READ_BODY_TEMPERATURE",
+      "READ_BODY_WATER_MASS",
+      "READ_BONE_MASS",
+      "READ_CERVICAL_MUCUS",
+      "READ_DISTANCE",
+      "READ_ELEVATION_GAINED",
+      "READ_EXERCISE",
+      "READ_EXERCISE_ROUTES",
+      "READ_FLOORS_CLIMBED",
+      "READ_HEALTH_DATA_HISTORY",
+      "READ_HEALTH_DATA_IN_BACKGROUND",
+      "READ_HEART_RATE",
+      "READ_HEART_RATE_VARIABILITY",
+      "READ_HEIGHT",
+      "READ_HYDRATION",
+      "READ_INTERMENSTRUAL_BLEEDING",
+      "READ_LEAN_BODY_MASS",
+      "READ_MEDICAL_DATA_ALLERGIES_INTOLERANCES",
+      "READ_MEDICAL_DATA_CONDITIONS",
+      "READ_MEDICAL_DATA_LABORATORY_RESULTS",
+      "READ_MEDICAL_DATA_MEDICATIONS",
+      "READ_MEDICAL_DATA_PERSONAL_DETAILS",
+      "READ_MEDICAL_DATA_PRACTITIONER_DETAILS",
+      "READ_MEDICAL_DATA_PREGNANCY",
+      "READ_MEDICAL_DATA_PROCEDURES",
+      "READ_MEDICAL_DATA_SOCIAL_HISTORY",
+      "READ_MEDICAL_DATA_VACCINES",
+      "READ_MEDICAL_DATA_VISITS",
+      "READ_MEDICAL_DATA_VITAL_SIGNS",
+      "READ_MENSTRUATION",
+      "READ_MINDFULNESS",
+      "READ_NUTRITION",
+      "READ_OVULATION_TEST",
+      "READ_OXYGEN_SATURATION",
+      "READ_PLANNED_EXERCISE",
+      "READ_POWER",
+      "READ_RESPIRATORY_RATE",
+      "READ_RESTING_HEART_RATE",
+      "READ_SEXUAL_ACTIVITY",
+      "READ_SKIN_TEMPERATURE",
+      "READ_SLEEP",
+      "READ_SPEED",
+      "READ_STEPS",
+      "READ_TOTAL_CALORIES_BURNED",
+      "READ_VO2_MAX",
+      "READ_WEIGHT",
+      "READ_WHEELCHAIR_PUSHES",
+      "WRITE_ACTIVE_CALORIES_BURNED",
+      "WRITE_ACTIVITY_INTENSITY",
+      "WRITE_BASAL_BODY_TEMPERATURE",
+      "WRITE_BASAL_METABOLIC_RATE",
+      "WRITE_BLOOD_GLUCOSE",
+      "WRITE_BLOOD_PRESSURE",
+      "WRITE_BODY_FAT",
+      "WRITE_BODY_TEMPERATURE",
+      "WRITE_BODY_WATER_MASS",
+      "WRITE_BONE_MASS",
+      "WRITE_CERVICAL_MUCUS",
+      "WRITE_DISTANCE",
+      "WRITE_ELEVATION_GAINED",
+      "WRITE_EXERCISE",
+      "WRITE_EXERCISE_ROUTE",
+      "WRITE_FLOORS_CLIMBED",
+      "WRITE_HEART_RATE",
+      "WRITE_HEART_RATE_VARIABILITY",
+      "WRITE_HEIGHT",
+      "WRITE_HYDRATION",
+      "WRITE_INTERMENSTRUAL_BLEEDING",
+      "WRITE_LEAN_BODY_MASS",
+      "WRITE_MEDICAL_DATA",
+      "WRITE_MENSTRUATION",
+      "WRITE_MINDFULNESS",
+      "WRITE_NUTRITION",
+      "WRITE_OVULATION_TEST",
+      "WRITE_OXYGEN_SATURATION",
+      "WRITE_PLANNED_EXERCISE",
+      "WRITE_POWER",
+      "WRITE_RESPIRATORY_RATE",
+      "WRITE_RESTING_HEART_RATE",
+      "WRITE_SEXUAL_ACTIVITY",
+      "WRITE_SKIN_TEMPERATURE",
+      "WRITE_SLEEP",
+      "WRITE_SPEED",
+      "WRITE_STEPS",
+      "WRITE_TOTAL_CALORIES_BURNED",
+      "WRITE_VO2_MAX",
+      "WRITE_WEIGHT",
+      "WRITE_WHEELCHAIR_PUSHES"
+    ],
+    "ios_permissions": [
+      "NSHealthClinicalHealthRecordsShareUsageDescription",
+      "NSHealthShareUsageDescription",
+      "NSHealthUpdateUsageDescription",
+      "NSHealthRequiredReadAuthorizationTypeIdentifiers",
+      "com.apple.developer.healthkit",
+      "com.apple.developer.healthkit.access",
+      "com.apple.developer.healthkit.background-delivery",
+      "com.apple.developer.healthkit.recalibrate-estimates"
+    ]
+  },
+  {
+    "permission_category": "Location",
+    "android_permissions": [
+      "ACCESS_COARSE_LOCATION",
+      "ACCESS_FINE_LOCATION",
+      "ACCESS_BACKGROUND_LOCATION",
+      "ACCESS_MEDIA_LOCATION",
+      "RANGING",
+      "UWB_RANGING",
+      "FOREGROUND_SERVICE_LOCATION",
+      "ACCESS_LOCATION_EXTRA_COMMANDS"
+    ],
+    "ios_permissions": [
+      "com.apple.developer.location.push",
+      "NSLocationAlwaysAndWhenInUseUsageDescription",
+      "NSLocationWhenInUseUsageDescription",
+      "NSLocationTemporaryUsageDescriptionDictionary",
+      "NSWidgetWantsLocation",
+      "NSLocationDefaultAccuracyReduced"
+    ]
+  },
+  {
+    "permission_category": "Messaging",
+    "android_permissions": [
+      "READ_SMS",
+      "RECEIVE_MMS",
+      "RECEIVE_SMS",
+      "RECEIVE_WAP_PUSH",
+      "SEND_SMS"
+    ],
+    "ios_permissions": [
+      "com.apple.developer.messages.critical-messaging",
+      "com.apple.developer.messaging-app",
+      "com.apple.developer.carrier-messaging-app"
+    ]
+  },
+  {
+    "permission_category": "Motion",
+    "android_permissions": [
+      "ACTIVITY_RECOGNITION",
+      "HIGH_SAMPLING_RATE_SENSORS"
+    ],
+    "ios_permissions": [
+      "NSMotionUsageDescription",
+      "NSFallDetectionUsageDescription"
+    ]
+  },
+  {
+    "permission_category": "Notification",
+    "android_permissions": [
+      "POST_NOTIFICATIONS"
+    ],
+    "ios_permissions": [
+      "NSUserNotificationsUsageDescription",
+      "aps-environment"
+    ]
+  },
+  {
+    "permission_category": "Media",
+    "android_permissions": [
+      "READ_MEDIA_VISUAL_USER_SELECTED",
+      "READ_MEDIA_IMAGES",
+      "READ_MEDIA_VIDEO",
+      "READ_EXTERNAL_STORAGE",
+      "WRITE_EXTERNAL_STORAGE",
+      "READ_MEDIA_AUDIO",
+      "MODIFY_AUDIO_SETTINGS",
+      "FOREGROUND_SERVICE_MEDIA_PLAYBACK",
+      "FOREGROUND_SERVICE_MEDIA_PROCESSING",
+      "FOREGROUND_SERVICE_MEDIA_PROJECTION"
+    ],
+    "ios_permissions": [
+      "NSPhotoLibraryAddUsageDescription",
+      "NSPhotoLibraryUsageDescription",
+      "NSAppleMusicUsageDescription"
+    ]
+  },
+  {
+    "permission_category": "NFC",
+    "android_permissions": [
+      "NFC",
+      "NFC_PREFERRED_PAYMENT_INFO",
+      "NFC_TRANSACTION_EVENT"
+    ],
+    "ios_permissions": [
+      "NFCReaderUsageDescription",
+      "com.apple.developer.nfc.readersession.formats",
+      "com.apple.developer.nfc.hce",
+      "com.apple.developer.nfc.hce.iso7816.select-identifier-prefixes",
+      "com.apple.developer.nfc.hce.default-contactless-app"
+    ]
+  },
+  {
+    "permission_category": "Accessory Setup",
+    "android_permissions": [
+      "REQUEST_COMPANION_PROFILE_GLASSES",
+      "REQUEST_COMPANION_PROFILE_WATCH",
+      "REQUEST_COMPANION_RUN_IN_BACKGROUND",
+      "REQUEST_COMPANION_START_FOREGROUND_SERVICES_FROM_BACKGROUND",
+      "REQUEST_COMPANION_USE_DATA_IN_BACKGROUND",
+      "REQUEST_OBSERVE_COMPANION_DEVICE_PRESENCE",
+      "REQUEST_COMPANION_PROFILE_GLASSES",
+      "REQUEST_COMPANION_PROFILE_WATCH",
+      "REQUEST_COMPANION_RUN_IN_BACKGROUND",
+      "REQUEST_COMPANION_START_FOREGROUND_SERVICES_FROM_BACKGROUND",
+      "REQUEST_COMPANION_USE_DATA_IN_BACKGROUND",
+      "REQUEST_COMPANION_PROFILE_AUTOMOTIVE_PROJECTION",
+      "DELIVER_COMPANION_MESSAGES",
+      "REQUEST_OBSERVE_COMPANION_DEVICE_PRESENCE"
+    ],
+    "ios_permissions": [
+      "com.apple.developer.accessory-setup-discovery-extension"
+    ]
+  },
+  {
+    "permission_category": "Device Management",
+    "android_permissions": [
+      "MANAGE_DEVICE_POLICY_ACCESSIBILITY",
+      "MANAGE_DEVICE_POLICY_ACCOUNT_MANAGEMENT",
+      "MANAGE_DEVICE_POLICY_ACROSS_USERS",
+      "MANAGE_DEVICE_POLICY_ACROSS_USERS_FULL",
+      "MANAGE_DEVICE_POLICY_ACROSS_USERS_SECURITY_CRITICAL",
+      "MANAGE_DEVICE_POLICY_AIRPLANE_MODE",
+      "MANAGE_DEVICE_POLICY_APP_FUNCTIONS",
+      "MANAGE_DEVICE_POLICY_APP_RESTRICTIONS",
+      "MANAGE_DEVICE_POLICY_APP_USER_DATA",
+      "MANAGE_DEVICE_POLICY_APPS_CONTROL",
+      "MANAGE_DEVICE_POLICY_ASSIST_CONTENT",
+      "MANAGE_DEVICE_POLICY_AUDIO_OUTPUT",
+      "MANAGE_DEVICE_POLICY_AUTOFILL",
+      "MANAGE_DEVICE_POLICY_BACKUP_SERVICE",
+      "MANAGE_DEVICE_POLICY_BLOCK_UNINSTALL",
+      "MANAGE_DEVICE_POLICY_BLUETOOTH",
+      "MANAGE_DEVICE_POLICY_BUGREPORT",
+      "MANAGE_DEVICE_POLICY_CALLS",
+      "MANAGE_DEVICE_POLICY_CAMERA",
+      "MANAGE_DEVICE_POLICY_CAMERA_TOGGLE",
+      "MANAGE_DEVICE_POLICY_CERTIFICATES",
+      "MANAGE_DEVICE_POLICY_COMMON_CRITERIA_MODE",
+      "MANAGE_DEVICE_POLICY_CONTENT_PROTECTION",
+      "MANAGE_DEVICE_POLICY_DEBUGGING_FEATURES",
+      "MANAGE_DEVICE_POLICY_DEFAULT_SMS",
+      "MANAGE_DEVICE_POLICY_DEVICE_IDENTIFIERS",
+      "MANAGE_DEVICE_POLICY_DISPLAY",
+      "MANAGE_DEVICE_POLICY_FACTORY_RESET",
+      "MANAGE_DEVICE_POLICY_FUN",
+      "MANAGE_DEVICE_POLICY_INPUT_METHODS",
+      "MANAGE_DEVICE_POLICY_INSTALL_UNKNOWN_SOURCES",
+      "MANAGE_DEVICE_POLICY_KEEP_UNINSTALLED_PACKAGES",
+      "MANAGE_DEVICE_POLICY_KEYGUARD",
+      "MANAGE_DEVICE_POLICY_LOCALE",
+      "MANAGE_DEVICE_POLICY_LOCATION",
+      "MANAGE_DEVICE_POLICY_LOCK",
+      "MANAGE_DEVICE_POLICY_LOCK_CREDENTIALS",
+      "MANAGE_DEVICE_POLICY_LOCK_TASK",
+      "MANAGE_DEVICE_POLICY_MANAGED_SUBSCRIPTIONS",
+      "MANAGE_DEVICE_POLICY_METERED_DATA",
+      "MANAGE_DEVICE_POLICY_MICROPHONE",
+      "MANAGE_DEVICE_POLICY_MICROPHONE_TOGGLE",
+      "MANAGE_DEVICE_POLICY_MOBILE_NETWORK",
+      "MANAGE_DEVICE_POLICY_MODIFY_USERS",
+      "MANAGE_DEVICE_POLICY_MTE",
+      "MANAGE_DEVICE_POLICY_NEARBY_COMMUNICATION",
+      "MANAGE_DEVICE_POLICY_NETWORK_LOGGING",
+      "MANAGE_DEVICE_POLICY_ORGANIZATION_IDENTITY",
+      "MANAGE_DEVICE_POLICY_OVERRIDE_APN",
+      "MANAGE_DEVICE_POLICY_PACKAGE_STATE",
+      "MANAGE_DEVICE_POLICY_PHYSICAL_MEDIA",
+      "MANAGE_DEVICE_POLICY_PRINTING",
+      "MANAGE_DEVICE_POLICY_PRIVATE_DNS",
+      "MANAGE_DEVICE_POLICY_PROFILE_INTERACTION",
+      "MANAGE_DEVICE_POLICY_PROFILES",
+      "MANAGE_DEVICE_POLICY_PROXY",
+      "MANAGE_DEVICE_POLICY_QUERY_SYSTEM_UPDATES",
+      "MANAGE_DEVICE_POLICY_RESET_PASSWORD",
+      "MANAGE_DEVICE_POLICY_RESTRICT_PRIVATE_DNS",
+      "MANAGE_DEVICE_POLICY_RUN_IN_BACKGROUND",
+      "MANAGE_DEVICE_POLICY_RUNTIME_PERMISSIONS",
+      "MANAGE_DEVICE_POLICY_SAFE_BOOT",
+      "MANAGE_DEVICE_POLICY_SCREEN_CAPTURE",
+      "MANAGE_DEVICE_POLICY_SCREEN_CONTENT",
+      "MANAGE_DEVICE_POLICY_SECURITY_LOGGING",
+      "MANAGE_DEVICE_POLICY_SETTINGS",
+      "MANAGE_DEVICE_POLICY_SMS",
+      "MANAGE_DEVICE_POLICY_STATUS_BAR",
+      "MANAGE_DEVICE_POLICY_SUPPORT_MESSAGE",
+      "MANAGE_DEVICE_POLICY_SUSPEND_PERSONAL_APPS",
+      "MANAGE_DEVICE_POLICY_SYSTEM_APPS",
+      "MANAGE_DEVICE_POLICY_SYSTEM_DIALOGS",
+      "MANAGE_DEVICE_POLICY_SYSTEM_UPDATES",
+      "MANAGE_DEVICE_POLICY_THREAD_NETWORK",
+      "MANAGE_DEVICE_POLICY_TIME",
+      "MANAGE_DEVICE_POLICY_USB_DATA_SIGNALLING",
+      "MANAGE_DEVICE_POLICY_USB_FILE_TRANSFER",
+      "MANAGE_DEVICE_POLICY_USERS",
+      "MANAGE_DEVICE_POLICY_VPN",
+      "MANAGE_DEVICE_POLICY_WALLPAPER",
+      "MANAGE_DEVICE_POLICY_WIFI",
+      "MANAGE_DEVICE_POLICY_WINDOWS",
+      "MANAGE_DEVICE_POLICY_WIPE_DATA"
+    ],
+    "ios_permissions": [
+      "com.apple.developer.automated-device-enrollment.add-devices"
+    ]
+  },
+  {
+    "permission_category": "Networking",
+    "android_permissions": [
+      "CHANGE_NETWORK_STATE",
+      "CHANGE_WIFI_STATE"
+    ],
+    "ios_permissions": [
+      "com.apple.developer.networking.networkextension"
+    ]
+  },
+  {
+    "permission_category": "Wifi State",
+    "android_permissions": [
+      "ACCESS_WIFI_STATE"
+    ],
+    "ios_permissions": [
+      "com.apple.developer.networking.wifi-info"
+    ]
+  },
+  {
+    "permission_category": "Multicast",
+    "android_permissions": [
+      "CHANGE_WIFI_MULTICAST_STATE"
+    ],
+    "ios_permissions": [
+      "com.apple.developer.networking.multicast"
+    ]
+  },
+  {
+    "permission_category": "Local Network",
+    "android_permissions": [
+      "NEARBY_WIFI_DEVICES"
+    ],
+    "ios_permissions": [
+      "NSLocalNetworkUsageDescription"
+    ]
+  }
+]

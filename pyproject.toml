@@ -1,0 +1,37 @@
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+
+[tool.poetry]
+name = "permission-mapping"
+version = "0.1.0"
+description = "Android and iOS permission mapping."
+# license
+authors = [
+    "Anonymous"
+]
+maintainers = [
+    "Anonymous"
+]
+readme = "README.md"
+# homepage
+repository = "anonymous"
+documentation = "anonymous"
+# keywords
+# classifiers
+packages = [
+    { include = "xpa" },
+]
+
+
+# Main project dependencies
+[tool.poetry.dependencies]
+python = "^3.11"
+bs4 = "^0.0.1"
+rapidfuzz = "^3.5.2"
+
+# Group for database
+[tool.poetry.group.database]
+[tool.poetry.group.database.dependencies]
+pymongo = "4.3.3"
