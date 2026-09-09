@@ -10,7 +10,7 @@ with open("./data/permission_mapping.json") as fp:
     permission_mapping = json.load(fp)
 
 for YEAR in YEARS:
-    with open(f"./data/permissions_paper.matches_w_permissions_{YEAR}_bind_({DATE}).json") as fp:
+    with open(f"./data/matches_w_permissions_{YEAR}_bind_({DATE}).json") as fp:
         apps = json.load(fp)
 
     # iterate over permission mapping to convert lists to sets for better comparison
