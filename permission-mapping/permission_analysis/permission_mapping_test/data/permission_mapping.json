@@ -2,9 +2,8 @@
   {
     "permission_category": "Authentication",
     "android_permissions": [
-      "CREDENTIAL_MANAGER_QUERY_CANDIDATE_CREDENTIALS",
-      "CREDENTIAL_MANAGER_SET_ALLOWED_PROVIDERS",
-      "CREDENTIAL_MANAGER_SET_ORIGIN"
+      "BIND_CREDENTIAL_PROVIDER_SERVICE",
+      "BIND_AUTOFILL_SERVICE"
     ],
     "ios_permissions": [
       "com.apple.developer.authentication-services.autofill-credential-provider"
@@ -47,7 +46,12 @@
       "CALL_COMPANION_APP",
       "MANAGE_OWN_CALLS",
       "FOREGROUND_SERVICE_PHONE_CALL",
-      "PROCESS_OUTGOING_CALLS"
+      "PROCESS_OUTGOING_CALLS",
+      "BIND_SCREENING_SERVICE",
+      "BIND_TELECOM_CONNECTION_SERVICE",
+      "BIND_INCALL_SERVICE",
+      "BIND_CALL_REDIRECTION_SERVICE"
+
     ],
     "ios_permissions": [
       "com.apple.developer.calling-app",
@@ -238,7 +242,8 @@
       "RECEIVE_MMS",
       "RECEIVE_SMS",
       "RECEIVE_WAP_PUSH",
-      "SEND_SMS"
+      "SEND_SMS",
+      "BIND_CARRIER_MESSAGING_CLIENT_SERVICE"
     ],
     "ios_permissions": [
       "com.apple.developer.messages.critical-messaging",
@@ -292,7 +297,8 @@
     "android_permissions": [
       "NFC",
       "NFC_PREFERRED_PAYMENT_INFO",
-      "NFC_TRANSACTION_EVENT"
+      "NFC_TRANSACTION_EVENT",
+      "BIND_NFC_SERVICE"
     ],
     "ios_permissions": [
       "NFCReaderUsageDescription",
@@ -311,14 +317,7 @@
       "REQUEST_COMPANION_START_FOREGROUND_SERVICES_FROM_BACKGROUND",
       "REQUEST_COMPANION_USE_DATA_IN_BACKGROUND",
       "REQUEST_OBSERVE_COMPANION_DEVICE_PRESENCE",
-      "REQUEST_COMPANION_PROFILE_GLASSES",
-      "REQUEST_COMPANION_PROFILE_WATCH",
-      "REQUEST_COMPANION_RUN_IN_BACKGROUND",
-      "REQUEST_COMPANION_START_FOREGROUND_SERVICES_FROM_BACKGROUND",
-      "REQUEST_COMPANION_USE_DATA_IN_BACKGROUND",
-      "REQUEST_COMPANION_PROFILE_AUTOMOTIVE_PROJECTION",
-      "DELIVER_COMPANION_MESSAGES",
-      "REQUEST_OBSERVE_COMPANION_DEVICE_PRESENCE"
+      "DELIVER_COMPANION_MESSAGES"
     ],
     "ios_permissions": [
       "com.apple.developer.accessory-setup-discovery-extension"
@@ -327,6 +326,7 @@
   {
     "permission_category": "Device Management",
     "android_permissions": [
+      "BIND_DEVICE_ADMIN",
       "MANAGE_DEVICE_POLICY_ACCESSIBILITY",
       "MANAGE_DEVICE_POLICY_ACCOUNT_MANAGEMENT",
       "MANAGE_DEVICE_POLICY_ACROSS_USERS",
@@ -450,6 +450,15 @@
     ],
     "ios_permissions": [
       "NSLocalNetworkUsageDescription"
+    ]
+  },
+  {
+    "permission_category": "VPN",
+    "android_permissions": [
+      "BIND_VPN_SERVICE"
+    ],
+    "ios_permissions": [
+      "com.apple.developer.networking.vpn.api"
     ]
   }
 ]
