@@ -1,0 +1,22 @@
+category,total_granting_categories,same,different,ios_count,android_count,ios_granted_by,android_granted_by,jaccard_similarity
+biometrics,2,0,2,1,1,user,device,0.0
+devicemanagement,2,0,2,1,1,"vendor, devicemanager",devicemanager,0.0
+messaging,2,0,2,1,1,device,vendor,0.0
+multicast,2,0,2,1,1,vendor,device,0.0
+media,3,1,2,1,3,user,"device, user, vendor",0.3333333333333333
+nfc,3,1,2,3,1,"device, user, vendor",device,0.3333333333333333
+camera,2,1,1,1,2,user,"device, user",0.5
+contacts,2,1,1,2,1,"user, vendor",user,0.5
+motion,2,1,1,1,2,user,"device, user",0.5
+bluetooth,2,1,1,1,2,user,"device, user",0.5
+notification,2,1,1,2,1,"device, user",user,0.5
+health,3,2,1,3,2,"device, user, vendor","device, user",0.6666666666666666
+location,3,2,1,2,3,"device, user","device, user, vendor",0.6666666666666666
+telephonyservices,3,2,1,2,3,"device, vendor","device, user, vendor",0.6666666666666666
+calendar,1,1,0,1,1,user,user,1.0
+authentication,1,1,0,1,1,device,device,1.0
+microphone,1,1,0,1,1,user,user,1.0
+localnetwork,1,1,0,1,1,user,user,1.0
+accessorysetup,1,1,0,1,1,device,device,1.0
+networking,1,1,0,1,1,device,device,1.0
+wifistate,1,1,0,1,1,device,device,1.0
