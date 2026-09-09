@@ -1,18 +1,20 @@
 import json
 
-DATE = "25-08-2025"
-YEAR = "2023"
+DATE = "28-07-2026"
+YEARS = ["2023", "2024", "2025"]
 FILE = "apps_w_diffs"
 
-with open(f"{FILE}_{YEAR}_{DATE}.json", "r") as fp:
-    js = json.load(fp)
 
-mongdb_compatible = []
+for YEAR in YEARS:
+    with open(f"{FILE}_{YEAR}_{DATE}.json", "r") as fp:
+        js = json.load(fp)
 
-for item in js:
-    mongdb_compatible.append({
-        "ios_id": item,
-    }| js[item]) 
+    mongdb_compatible = []
 
-with open(f"{FILE}_{YEAR}_mongodb_{DATE}.json", "w") as fp:
-    json.dump(mongdb_compatible, fp)
+    for item in js:
+        mongdb_compatible.append({
+            "ios_id": item,
+        }| js[item]) 
+
+    with open(f"{FILE}_{YEAR}_mongodb_{DATE}.json", "w") as fp:
+        json.dump(mongdb_compatible, fp)

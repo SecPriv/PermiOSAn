@@ -1,63 +1,41 @@
 import os
-import pymongo as mongo
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
 import numpy as np
-from collections import Counter
+from collections import Counter, defaultdict
 import statistics
+import json
 
-DATE = "25-08-2025"
-PLOT_FOLDER_PATH = "ENTER FOLDER PATH HERE"
-
-MONGO_URL: str = os.getenv(
-     "MONGO_URL", "mongodb://localadmin:localadmin@localhost/"
-)
-MONGO_DB: str = os.getenv("MONGO_DB", "permissions_paper")
-_client = mongo.MongoClient(MONGO_URL)
-
-_db = _client[MONGO_DB]
-
-collection_2023 = _db[f"permission_diffs_2023-filtered-({DATE})"]
-collection_2024 = _db[f"permission_diffs_2024-filtered-({DATE})"]
-collection_2025 = _db[f"permission_diffs_2025-filtered-({DATE})"]
+DATE = "28-07-2026"
+PLOT_FOLDER_PATH = "./plots_28_07_2026_no_mongo"
+os.makedirs(PLOT_FOLDER_PATH, exist_ok=True)
 
 
-def _independent_distribution_diffs_year(year: int):
-    return [
-        {
-            '$project': {
-                'ios_id': 1, 
-                'permission_diffs': 1, 
-                'total_android': 1, 
-                'total_android_custom': 1, 
-                'total_ios': 1, 
-                'total_common_permissions': 1, 
-                'common_permissions': 1, 
-                'diffs': {
-                    '$size': {
-                        '$objectToArray': '$permission_diffs'
-                    }
-                }
-            }
-        }, {
-            '$group': {
-                '_id': '$diffs', 
-                'number': {
-                    '$sum': 1
-                }
-            }
-        }, {
-            '$sort': {
-                '_id': 1
-            }
-        }
-    ]
+with open(f"./data/permissions_paper.permission_diffs_2023-filtered-({DATE}).json") as fp:
+    collection_2023 = json.load(fp)
+
+with open(f"./data/permissions_paper.permission_diffs_2024-filtered-({DATE}).json") as fp:
+    collection_2024 = json.load(fp)
+
+with open(f"./data/permissions_paper.permission_diffs_2025-filtered-({DATE}).json") as fp:
+    collection_2025 = json.load(fp)
+
+
+
+# Groups app pairs by the number of keys in permission_diffs, counts each group
+def _agg_independent_distribution_diffs_year(collection):
+    counter = Counter()
+    for doc in collection:
+        n_diffs = len(doc.get("permission_diffs", {}))
+        counter[n_diffs] += 1
+    return sorted([{"_id": k, "number": v} for k, v in counter.items()], key=lambda x: x["_id"])
+
 
 def get_permission_distribution_of_differences_per_year():
-    res_indep_dist_diffs_2023 = collection_2023.aggregate(_independent_distribution_diffs_year(2023))
-    res_indep_dist_diffs_2024 = collection_2024.aggregate(_independent_distribution_diffs_year(2024))
-    res_indep_dist_diffs_2025 = collection_2025.aggregate(_independent_distribution_diffs_year(2025))
+    res_indep_dist_diffs_2023 = _agg_independent_distribution_diffs_year(collection_2023)
+    res_indep_dist_diffs_2024 = _agg_independent_distribution_diffs_year(collection_2024)
+    res_indep_dist_diffs_2025 = _agg_independent_distribution_diffs_year(collection_2025)
 
     print("Distribution permission diffs in 2023:")
     sum_2023 = 0
@@ -82,34 +60,12 @@ def get_permission_distribution_of_differences_per_year():
     print("__________________________________")
     print("Considering only pairs 2023 -> 2024 -> 2025")
 
-def _distribution():
-   return [
-    {
-        '$addFields': {
-            'n_diffs': {
-                '$size': {
-                    '$objectToArray': '$permission_diffs'
-                }
-            }
-        }
-    }, {
-        '$group': {
-            '_id': '$n_diffs', 
-            'number': {
-                '$sum': 1
-            }
-        }
-    }, {
-        '$sort': {
-            '_id': 1
-        }
-    }
-]
+
 
 def get_permission_distribution_cdf():
-    res_dist_diffs_2023 = collection_2023.aggregate(_distribution())
-    res_dist_diffs_2024 = collection_2024.aggregate(_distribution())
-    res_dist_diffs_2025 = collection_2025.aggregate(_distribution())
+    res_dist_diffs_2023 = _agg_independent_distribution_diffs_year(collection_2023)
+    res_dist_diffs_2024 = _agg_independent_distribution_diffs_year(collection_2024)
+    res_dist_diffs_2025 = _agg_independent_distribution_diffs_year(collection_2025)
 
     print("Distribution 2023 -> 2024 of 2023:")
     sum_2023 = 0
@@ -140,14 +96,13 @@ def get_permission_distribution_cdf():
     df_cdf_2023 = pd.DataFrame(numbers_cdf_2023)
     df_cdf_2024 = pd.DataFrame(numbers_cdf_2024)
     df_cdf_2025 = pd.DataFrame(numbers_cdf_2025)
-    #df_cdf_2025 = pd.DataFrame(numbers_cdf_2025)
     df_cdf_2023 = df_cdf_2023.sort_values(by='_id').reset_index(drop=True)
     df_cdf_2024 = df_cdf_2024.sort_values(by='_id').reset_index(drop=True)
     df_cdf_2025 = df_cdf_2025.sort_values(by='_id').reset_index(drop=True)
 
-    stats_df = pd.concat([df_cdf_2023.rename(columns={"number": "f_2023"}).set_index('_id'), 
-                          df_cdf_2024.rename(columns={"number": "f_2024"}).set_index('_id'), 
-                          df_cdf_2025.rename(columns={"number": "f_2025"}).set_index('_id')], 
+    stats_df = pd.concat([df_cdf_2023.rename(columns={"number": "f_2023"}).set_index('_id'),
+                          df_cdf_2024.rename(columns={"number": "f_2024"}).set_index('_id'),
+                          df_cdf_2025.rename(columns={"number": "f_2025"}).set_index('_id')],
                           axis=1)
     stats_df = stats_df.fillna(0)
     # PDF
@@ -159,7 +114,7 @@ def get_permission_distribution_cdf():
     stats_df['cdf_2024'] = stats_df['pdf_2024'].cumsum()
     stats_df['cdf_2025'] = stats_df['pdf_2025'].cumsum()
     print(stats_df)
-    
+
     fig, ax = plt.subplots(figsize=(15, 7))
     colors = sns.color_palette("colorblind", 3)
     ax.plot(stats_df.index.to_list(), stats_df['cdf_2023'], drawstyle='steps-post', label="2023", color=colors[0], linestyle='-.', linewidth=5)
@@ -169,135 +124,45 @@ def get_permission_distribution_cdf():
     plt.yticks(np.arange(0,1.1,0.1), fontsize=22)
     plt.xlabel('# of Differences', fontsize=22)
     plt.ylabel('CDF', fontsize=22)
-    #plt.title('CDF of Difference Distribution')
     plt.grid(True, linestyle='--', linewidth=0.5, alpha=0.25, zorder=0)
     plt.legend(fontsize=22)
     plt.tight_layout()
-    plt.savefig(os.path.join(PLOT_FOLDER_PATH, f"get_permission_distribution_cdf-({DATE})-updated.pdf"), format="pdf")  
-    #plt.show()
+    plt.savefig(os.path.join(PLOT_FOLDER_PATH, f"get_permission_distribution_cdf-({DATE})-updated.pdf"), format="pdf")
 
     print("__________________________________")
 
-def _apps_where_number_diffs_not_change(frm: int, to: int):
-    return [
-    {
-        '$addFields': {
-            'n_diffs': {
-                '$size': {
-                    '$objectToArray': '$permission_diffs'
-                }
-            }, 
-            f'n_diffs_{to}': {
-                '$size': {
-                    '$objectToArray': f'${to}.permission_diffs'
-                }
-            }
-        }
-    }, {
-        '$addFields': {
-            'is_different': {
-                '$ne': [
-                    '$n_diffs', f'$n_diffs_{to}'
-                ]
-            }, 
-            'difference': {
-                '$subtract': [
-                    '$n_diffs', f'$n_diffs_{to}'
-                ]
-            }
-        }
-    }, {
-        '$match': {
-            'is_different': False
-        }
-    }, {
-        '$addFields': {
-            'y_fields': {
-                '$map': {
-                    'input': {
-                        '$objectToArray': '$permission_diffs'
-                    }, 
-                    'as': 'field', 
-                    'in': '$$field.k'
-                }
-            }, 
-            f'{to}_fields': {
-                '$map': {
-                    'input': {
-                        '$objectToArray': f'${to}.permission_diffs'
-                    }, 
-                    'as': 'field', 
-                    'in': '$$field.k'
-                }
-            }
-        }
-    }, {
-        '$addFields': {
-            'sameKeys': {
-                '$setEquals': [
-                    f'${to}_fields', '$y_fields'
-                ]
-            }
-        }
-    }, {
-        '$group': {
-            '_id': '$sameKeys', 
-            'number': {
-                '$sum': 1
-            }
-        }
-    }
-]
 
-def _apps_where_number_diff_changed(year: int):
-    return [
-    {
-        '$addFields': {
-            'other.diffs': {
-                '$size': {
-                    '$objectToArray': f'${year}.permission_diffs'
-                }
-            }, 
-            'diffs': {
-                '$size': {
-                    '$objectToArray': '$permission_diffs'
-                }
-            }
-        }
-    }, {
-        '$addFields': {
-            'is_different': {
-                '$ne': [
-                    '$diffs', '$other.diffs'
-                ]
-            }, 
-            'number_diffs': {
-                '$subtract': [
-                    '$diffs', '$other.diffs'
-                ]
-            }
-        }
-    }, {
-        '$match': {
-            'is_different': True
-        }
-    }, {
-        '$group': {
-            '_id': '$number_diffs', 
-            'number': {
-                '$sum': 1
-            }
-        }
-    }, {
-        '$sort': {
-            '_id': 1
-        }
-    }
-]
+# Compares n_diffs of the base obj vs the nested sub-obj keyed by year, groups by (n_diffs_base - n_diffs_other), keeps only rows that differ
+def _agg_apps_where_number_diff_changed(collection, year):
+    counter = Counter()
+    for doc in collection:
+        n_diffs = len(doc.get("permission_diffs", {}))
+        other = doc.get(str(year), {})
+        n_diffs_other = len(other.get("permission_diffs", {}))
+        if n_diffs != n_diffs_other:
+            counter[n_diffs - n_diffs_other] += 1
+    return sorted([{"_id": k, "number": v} for k, v in counter.items()], key=lambda x: x["_id"])
+
+
+# Keeps only app pairs where n_diffs is equal between base and nested `to` obj, then checks whether the set of category keys is also the same and groups by that boolean
+def _agg_apps_where_number_diffs_not_change(collection, frm, to):
+    counter = Counter()
+    for doc in collection:
+        n_diffs = len(doc.get("permission_diffs", {}))
+        other = doc.get(str(to), {})
+        n_diffs_other = len(other.get("permission_diffs", {}))
+        if n_diffs != n_diffs_other:
+            continue  # only keep equal-count docs
+        y_fields = set(doc.get("permission_diffs", {}).keys())
+        to_fields = set(other.get("permission_diffs", {}).keys())
+        same_keys = str(y_fields == to_fields)
+        counter[same_keys] += 1
+    return [{"_id": k, "number": v} for k, v in counter.items()]
+
 
 def get_changes_of_permission_diffs():
     print("Apps with diff change between 2023-2024:")
-    res_diff_2023_2024 = collection_2023.aggregate(_apps_where_number_diff_changed(2024))
+    res_diff_2023_2024 = _agg_apps_where_number_diff_changed(collection_2023, 2024)
     sum = 0
     sum_neg = 0
     for doc in res_diff_2023_2024:
@@ -309,7 +174,7 @@ def get_changes_of_permission_diffs():
     print(f"Apps with MORE (2024) diffs than in 2023: {sum-sum_neg}")
     print(f"Apps with LESS (2024) diffs than in 2023: {sum_neg}")
     print("----------------------------------")
-    res_diff_2024_2025 = collection_2024.aggregate(_apps_where_number_diff_changed(2025))
+    res_diff_2024_2025 = _agg_apps_where_number_diff_changed(collection_2024, 2025)
     sum = 0
     sum_neg = 0
     for doc in res_diff_2024_2025:
@@ -322,7 +187,7 @@ def get_changes_of_permission_diffs():
     print(f"Apps with LESS (2025) diffs than in 2024: {sum_neg}")
     print("----------------------------------")
     print("Apps with no diff change between 2023-2024:")
-    res_no_diff_2023_2024 = collection_2023.aggregate(_apps_where_number_diffs_not_change(2023,2024))
+    res_no_diff_2023_2024 = _agg_apps_where_number_diffs_not_change(collection_2023, 2023, 2024)
     sum = 0
     for doc in res_no_diff_2023_2024:
         if doc["_id"] == "True":
@@ -333,7 +198,7 @@ def get_changes_of_permission_diffs():
     print(f"Total apps with no diffs: {sum}")
     print("----------------------------------")
     print("Apps with no diff change between 2024-2025:")
-    res_no_diff_2024_2025 = collection_2024.aggregate(_apps_where_number_diffs_not_change(2024,2025))
+    res_no_diff_2024_2025 = _agg_apps_where_number_diffs_not_change(collection_2024, 2024, 2025)
     sum = 0
     for doc in res_no_diff_2024_2025:
         if doc["_id"] == "True":
@@ -345,164 +210,114 @@ def get_changes_of_permission_diffs():
 
     print("__________________________________")
 
-def _distribution_of_diffs_among_permission_categories():
-    return [
-    {
-        '$match': {
-            'permission_diffs': {
-                '$ne': {}
-            }
-        }
-    }, {
-        '$project': {
-            'permission_diffs_array': {
-                '$objectToArray': '$permission_diffs'
-            }
-        }
-    }, {
-        '$unwind': {
-            'path': '$permission_diffs_array', 
-            'includeArrayIndex': 'string', 
-            'preserveNullAndEmptyArrays': True
-        }
-    }, {
-        '$addFields': {
-            'category': '$permission_diffs_array.k', 
-            'android': '$permission_diffs_array.v.android', 
-            'ios': '$permission_diffs_array.v.ios'
-        }
-    }, {
-        '$group': {
-            '_id': '$category', 
-            'docCount': {
-                '$sum': 1
-            }, 
-            'android_non_empty': {
-                '$sum': {
-                    '$cond': [
-                        {
-                            '$gt': [
-                                {
-                                    '$size': '$android'
-                                }, 0
-                            ]
-                        }, 1, 0
-                    ]
-                }
-            }, 
-            'ios_non_empty': {
-                '$sum': {
-                    '$cond': [
-                        {
-                            '$gt': [
-                                {
-                                    '$size': '$ios'
-                                }, 0
-                            ]
-                        }, 1, 0
-                    ]
-                }
-            }
-        }
-    }, {
-        '$sort': {
-            'docCount': -1
-        }
-    }
-]
+
+# Filters app pairs with non-empty permission_diffs, then for each category entry counts: total occurrences, android non-empty, ios non-empty
+def _agg_distribution_of_diffs_among_permission_categories(collection):
+    agg = defaultdict(lambda: {"docCount": 0, "android_non_empty": 0, "ios_non_empty": 0})
+    for doc in collection:
+        perm_diffs = doc.get("permission_diffs", {})
+        if not perm_diffs:
+            continue
+        for category, v in perm_diffs.items():
+            agg[category]["docCount"] += 1
+            if len(v.get("android", [])) > 0:
+                agg[category]["android_non_empty"] += 1
+            if len(v.get("ios", [])) > 0:
+                agg[category]["ios_non_empty"] += 1
+    return sorted(
+        [{"_id": cat, **counts} for cat, counts in agg.items()],
+        key=lambda x: -x["docCount"]
+    )
+
 
 def get_differences_among_categories():
     print("Distribution of differences among permission categories in 2023:")
-    res_diff_categories_2023 = collection_2023.aggregate(_distribution_of_diffs_among_permission_categories())
-    for doc in res_diff_categories_2023:
+    for doc in _agg_distribution_of_diffs_among_permission_categories(collection_2023):
         print(doc)
 
     print("----------------------------------")
     print("Distribution of differences among permission categories in 2024:")
-    res_diff_categories_2024 = collection_2024.aggregate(_distribution_of_diffs_among_permission_categories())
-    for doc in res_diff_categories_2024:
+    for doc in _agg_distribution_of_diffs_among_permission_categories(collection_2024):
         print(doc)
 
     print("----------------------------------")
     print("Distribution of differences among permission categories in 2025:")
-    res_diff_categories_2025 = collection_2025.aggregate(_distribution_of_diffs_among_permission_categories())
-    for doc in res_diff_categories_2025:
+    for doc in _agg_distribution_of_diffs_among_permission_categories(collection_2025):
         print(doc)
 
     print("__________________________________")
 
-def _distribution_of_categories_per_year():
-    return [
-    {
-        '$addFields': {
-            'merged': {
-                '$mergeObjects': [
-                    '$common_permissions', '$permission_diffs'
-                ]
-            }
-        }
-    }, {
-        '$addFields': {
-            'mergedArray': {
-                '$objectToArray': '$merged'
-            }
-        }
-    }, {
-        '$unwind': {
-            'path': '$mergedArray', 
-            'preserveNullAndEmptyArrays': False
-        }
-    }, {
-        '$project': {
-            'category': '$mergedArray.k', 
-            'year': 1, 
-            'docId': '$ios_id'
-        }
-    }, {
-        '$group': {
-            '_id': '$category', 
-            'app_ids': {
-                '$addToSet': '$docId'
-            }
-        }
-    }, {
-        '$sort': {
-            'category': 1
-        }
-    }
-]
+
+# Merges common_permissions + permission_diffs per app pair, then for each category, collects the set of ios_ids that have that category
+def _agg_distribution_of_categories_per_year(collection):
+    agg = defaultdict(set)
+    for doc in collection:
+        ios_id = doc.get("ios_id")
+        merged = {**doc.get("common_permissions", {}), **doc.get("permission_diffs", {})}
+        for category in merged:
+            agg[category].add(ios_id)
+    return sorted(
+        [{"_id": cat, "app_ids": list(ids)} for cat, ids in agg.items()],
+        key=lambda x: x["_id"]
+    )
+
 
 def plot_differences_added_removed_across_categories():
-    print("Distribution of differences among permission categories between 2023 - 2024:")
-    res_diff_categories_2023 = [doc for doc in collection_2023.aggregate(_distribution_of_categories_per_year())]
-    res_diff_categories_2024 = [doc for doc in collection_2024.aggregate(_distribution_of_categories_per_year())]
-    res_diff_categories_2025 = [doc for doc in collection_2025.aggregate(_distribution_of_categories_per_year())]
-    ###
+    print("Distribution of differences among permission categories between 2023 - 2025:")
+    res_diff_categories_2023 = _agg_distribution_of_categories_per_year(collection_2023)
+    res_diff_categories_2024 = _agg_distribution_of_categories_per_year(collection_2024)
+    res_diff_categories_2025 = _agg_distribution_of_categories_per_year(collection_2025)
+
+
+    # Build lookup dicts for O(1) access
+    dict_2023 = {d["_id"]: set(d["app_ids"]) for d in res_diff_categories_2023}
+    dict_2024 = {d["_id"]: set(d["app_ids"]) for d in res_diff_categories_2024}
+    dict_2025 = {d["_id"]: set(d["app_ids"]) for d in res_diff_categories_2025}
+
+    # 2023-2024
     added_data_2023_2024 = {}
     removed_data_2023_2024 = {}
-    for doc_2023 in res_diff_categories_2023:
-        for doc_2024 in res_diff_categories_2024:
-            if doc_2023["_id"] == doc_2024["_id"]:
-                added_data_2023_2024[doc_2023["_id"]] = len([x for x in doc_2024["app_ids"] if x not in doc_2023["app_ids"]])
-                removed_data_2023_2024[doc_2023["_id"]] = -1 * len([x for x in doc_2023["app_ids"] if x not in doc_2024["app_ids"]])
-    ###
+    for cat in dict_2023:
+        if cat in dict_2024:
+            added_data_2023_2024[cat] = len(dict_2024[cat] - dict_2023[cat])
+            removed_data_2023_2024[cat] = -1 * len(dict_2023[cat] - dict_2024[cat])
+    print("---------------------------------------------")
+    print("2023-2024:")
+    print("ADDED")
+    print(added_data_2023_2024)
+    print("REMOVED")
+    print(removed_data_2023_2024)
+
+    # 2024-2025
     added_data_2024_2025 = {}
     removed_data_2024_2025 = {}
-    for doc_2024 in res_diff_categories_2024:
-        for doc_2025 in res_diff_categories_2025:
-            if doc_2024["_id"] == doc_2025["_id"]:
-                added_data_2024_2025[doc_2024["_id"]] = len([x for x in doc_2025["app_ids"] if x not in doc_2024["app_ids"]])
-                removed_data_2024_2025[doc_2024["_id"]] = -1* len([x for x in doc_2024["app_ids"] if x not in doc_2025["app_ids"]])
-    ###
+    for cat in dict_2024:
+        if cat in dict_2025:
+            added_data_2024_2025[cat] = len(dict_2025[cat] - dict_2024[cat])
+            removed_data_2024_2025[cat] = -1 * len(dict_2024[cat] - dict_2025[cat])
+    print("---------------------------------------------")
+    print("2024-2025:")
+    print("ADDED")
+    print(added_data_2024_2025)
+    print("REMOVED")
+    print(removed_data_2024_2025)
+
+    # 2023-2025
     added_data_2023_2025 = {}
     removed_data_2023_2025 = {}
-    for doc_2023 in res_diff_categories_2023:
-        for doc_2025 in res_diff_categories_2025:
-            if doc_2023["_id"] == doc_2025["_id"]:
-                added_data_2023_2025[doc_2025["_id"]] = len([x for x in doc_2025["app_ids"] if x not in doc_2023["app_ids"]])
-                removed_data_2023_2025[doc_2025["_id"]] = -1* len([x for x in doc_2023["app_ids"] if x not in doc_2025["app_ids"]])
-    ###
-    categories = set([doc["_id"] for doc in res_diff_categories_2023])
+    for cat in dict_2023:
+        if cat in dict_2025:
+            added_data_2023_2025[cat] = len(dict_2025[cat] - dict_2023[cat])
+            removed_data_2023_2025[cat] = -1 * len(dict_2023[cat] - dict_2025[cat])
+    print("---------------------------------------------")
+    print("2023-2024:")
+    print("ADDED")
+    print(added_data_2023_2025)
+    print("REMOVED")
+    print(removed_data_2023_2025)
+    print("---------------------------------------------")
+
+    categories = set(dict_2023.keys())
     added_val_23_24, added_val_24_25, removed_val_23_24, removed_val_24_25, cats, both_23 = [], [], [], [], [], []
     for category in categories:
         cats.append(category)
@@ -515,8 +330,8 @@ def plot_differences_added_removed_across_categories():
     df_1 = pd.DataFrame({
         'categories': cats,
         'added_val_23_24': added_val_23_24,
-        'removed_val_23_24': removed_val_23_24, 
-        'added_val_24_25': added_val_24_25, 
+        'removed_val_23_24': removed_val_23_24,
+        'added_val_24_25': added_val_24_25,
         'removed_val_24_25': removed_val_24_25,
         'both_23': both_23
         })
@@ -524,54 +339,51 @@ def plot_differences_added_removed_across_categories():
 
     net_23_24  = [(df_1['added_val_23_24'][i] + df_1['removed_val_23_24'][i]) for i in range(0, len(added_val_23_24))]
     net_24_25 = [(df_1['added_val_24_25'][i] + df_1['removed_val_24_25'][i]) for i in range(0, len(added_val_24_25))]
-    
-    #print(f"{len(added_data_2023_2024)} -- {len(removed_data_2023_2024)} -- {len(net_23_24)}")
 
     x = range(len(categories))
-    fig, ax = plt.subplots(figsize=(12, 6))
+    fig, ax = plt.subplots(figsize=(12, 5))
     bar_width = 0.45
     # Offset positions for 2023 and 2024
     x_2023 = [i - bar_width/2 for i in x]
     x_2024 = [i + bar_width/2 for i in x]
-    # color combis: 19535F + 4ECDC4 ; D30C7B + 4ECDC4 ; D1437C + 25C4B9
     plt.grid(axis='y', linestyle='--', linewidth=0.5, alpha=0.7, zorder=0)
-    #ax.bar(x, added_data_2023_2024, width=bar_width, color="#6C6C6C", edgecolor="black", linewidth=0.5, label="added", zorder=2)
-    #ax.bar(x, removed_data_2023_2024, width=bar_width, color="#C6C6C6", edgecolor="black", linewidth=0.5, label="removed", zorder=2)
     # Plot 2023 bars
     ax.bar(x_2023, df_1['added_val_23_24'], width=bar_width, color="#6C6C6C",
         edgecolor="black", linewidth=0.5, label="added 2024", zorder=2)
     ax.bar(x_2023, df_1['removed_val_23_24'], width=bar_width, color="#C6C6C6",
         edgecolor="black", linewidth=0.5, label="removed 2024", zorder=2)
-
+    
     # Plot 2024 bars
     ax.bar(x_2024, df_1['added_val_24_25'], width=bar_width, color="#6C6C6C",
         edgecolor="black", linewidth=0.5, label="added 2025", zorder=2, hatch="//")
     ax.bar(x_2024, df_1['removed_val_24_25'], width=bar_width, color="#C6C6C6",
         edgecolor="black", linewidth=0.5, label="removed 2025", zorder=2, hatch="//")
-
+    
     plt.subplots_adjust(bottom=0.29)
     plt.axhline(0, color='black')
     plt.xticks(x, fontsize=16)
     plt.yticks(fontsize=14)
     ax.set_xticklabels(df_1['categories'], rotation=45, ha='right')
-    #ax.set_xlim(-bar_width / 2, len(categories) - 1 + bar_width / 2)
     for i in range(0, len(net_23_24)):
-        plt.text(x_2023[i], df_1['added_val_23_24'][i] + 2, f'{net_23_24[i]:+}', 
+        plt.text(x_2023[i], df_1['added_val_23_24'][i] + 2, f'{net_23_24[i]:+}',
                 va='center', ha='center', fontsize=9, zorder=3)
-        plt.text(x_2024[i], df_1['added_val_24_25'][i] + 2, f'{net_24_25[i]:+}', 
+        plt.text(x_2024[i], df_1['added_val_24_25'][i] + 2, f'{net_24_25[i]:+}',
                 va='center', ha='center', fontsize=9, zorder=3)
-        #print(net[i])
-        #plt.text(i, added_data_2023_2024[i] + 20, f'{net[i]:+}', va='center', ha='center', fontsize=8, zorder=3)
     plt.legend(fontsize=16)
-    #plt.tight_layout()
     plt.margins(x=0.01)
-    plt.savefig(os.path.join(PLOT_FOLDER_PATH, f"differences_added_removed_23_24_25-({DATE}).pdf"), format="pdf")  
-    #plt.tight_layout()
-    #plt.show()
+    plt.savefig(os.path.join(PLOT_FOLDER_PATH, f"differences_added_removed_23_24_25-({DATE}).pdf"), format="pdf")
+
     added_val_23_25, removed_val_23_25, cats, both = [], [], [], []
     for category in categories:
-            cats.append(category)
-            added_val_23_25 .append(added_data_2023_2025[category])
+            if category == "Telephony Services":
+                cats.append("Tel. Services")
+            elif category == "Accessory Setup":
+                cats.append("Acc. Setup")
+            elif category == "Device Management":
+                cats.append("Device Mgmt.")
+            else:
+                cats.append(category)
+            added_val_23_25.append(added_data_2023_2025[category])
             removed_val_23_25.append(removed_data_2023_2025[category])
             both.append(added_data_2023_2025[category] - removed_data_2023_2025[category])
 
@@ -579,7 +391,7 @@ def plot_differences_added_removed_across_categories():
     df_2 = df_2.sort_values('both', ascending=False).reset_index(drop=True)
     net_23_25 = [(df_2['added_val_23_25'][i] + df_2['removed_val_23_25'][i]) for i in range(0, len(added_val_23_25))]
 
-    fig, ax = plt.subplots(figsize=(12, 6))
+    fig, ax = plt.subplots(figsize=(12, 5))
     plt.grid(axis='y', linestyle='--', linewidth=0.5, alpha=0.7, zorder=0)
     plt.subplots_adjust(bottom=0.28)
     bar_width = 0.9
@@ -592,140 +404,47 @@ def plot_differences_added_removed_across_categories():
     plt.xticks(x)
     plt.yticks(fontsize=14)
     ax.set_xticklabels(df_2['categories'], rotation=45, ha='right', fontsize=16)
-    #ax.set_xlim(-bar_width / 2, len(categories) - 1 + bar_width / 2)
     for i in range(0, len(net_23_25)):
-        plt.text(x_2025[i], df_2['added_val_23_25'][i] + 5, f'{net_23_25[i]:+}', 
+        plt.text(x_2025[i], df_2['added_val_23_25'][i] + 5, f'{net_23_25[i]:+}',
                 va='center', ha='center', fontsize=12, zorder=3)
     plt.legend(fontsize=16)
+    ax.tick_params(axis='x', pad=0)
     plt.margins(x=0.001)
-    plt.savefig(os.path.join(PLOT_FOLDER_PATH, f"differences_added_removed_23_25-({DATE}).pdf"), format="pdf")  
+    plt.savefig(os.path.join(PLOT_FOLDER_PATH, f"differences_added_removed_23_25-({DATE}).pdf"), format="pdf")
 
 
-def _app_permissions_per_mapping_category():
-    return [
-    {
-        '$project': {
-            'ios_id': 1, 
-            'categories_diff': {
-                '$objectToArray': '$permission_diffs'
-            }, 
-            'categories_common': {
-                '$objectToArray': '$common_permissions'
-            }
-        }
-    }, {
-        '$project': {
-            'ios_id': 1, 
-            'categories': {
-                '$concatArrays': [
-                    '$categories_diff', '$categories_common'
-                ]
-            }
-        }
-    }, {
-        '$unwind': '$categories'
-    }, {
-        '$project': {
-            'ios_id': 1, 
-            'category': '$categories.k', 
-            'android': '$categories.v.android', 
-            'ios': '$categories.v.ios'
-        }
-    }, {
-        '$group': {
-            '_id': '$category', 
-            'android_non_empty': {
-                '$addToSet': {
-                    '$cond': [
-                        {
-                            '$gt': [
-                                {
-                                    '$size': '$android'
-                                }, 0
-                            ]
-                        }, '$ios_id', '$$REMOVE'
-                    ]
-                }
-            }, 
-            'ios_non_empty': {
-                '$addToSet': {
-                    '$cond': [
-                        {
-                            '$gt': [
-                                {
-                                    '$size': '$ios'
-                                }, 0
-                            ]
-                        }, '$ios_id', '$$REMOVE'
-                    ]
-                }
-            }
-        }
-    }, {
-        '$project': {
-            '_id': 0, 
-            'category': '$_id', 
-            'android_non_empty': 1, 
-            'ios_non_empty': 1
-        }
-    }, {
-        '$sort': {
-            'category': 1
-        }
-    }
-]
-    
-def _jitter_plot_data_aggregation():
-    return [
-    {
-        '$project': {
-            'merged': {
-                '$mergeObjects': [
-                    '$common_permissions', '$permission_diffs'
-                ]
-            }
-        }
-    }, {
-        '$project': {
-            'entries': {
-                '$objectToArray': '$merged'
-            }
-        }
-    }, {
-        '$project': {
-            'androidCount': {
-                '$size': {
-                    '$filter': {
-                        'input': '$entries', 
-                        'as': 'e', 
-                        'cond': {
-                            '$gt': [
-                                {
-                                    '$size': '$$e.v.android'
-                                }, 0
-                            ]
-                        }
-                    }
-                }
-            }, 
-            'iosCount': {
-                '$size': {
-                    '$filter': {
-                        'input': '$entries', 
-                        'as': 'e', 
-                        'cond': {
-                            '$gt': [
-                                {
-                                    '$size': '$$e.v.ios'
-                                }, 0
-                            ]
-                        }
-                    }
-                }
-            }
-        }
-    }
-]
+# Merges common_permissions + permission_diffs, then for each category collects, the sets of ios_ids that have a non-empty android/ios list
+def _agg_app_permissions_per_mapping_category(collection):
+    android_sets = defaultdict(set)
+    ios_sets = defaultdict(set)
+    for doc in collection:
+        ios_id = doc.get("ios_id")
+        merged = {**doc.get("permission_diffs", {}), **doc.get("common_permissions", {})}
+        for category, v in merged.items():
+            if len(v.get("android", [])) > 0:
+                android_sets[category].add(ios_id)
+            if len(v.get("ios", [])) > 0:
+                ios_sets[category].add(ios_id)
+    all_cats = set(android_sets.keys()) | set(ios_sets.keys())
+    return sorted(
+        [{"category": cat,
+          "android_non_empty": list(android_sets[cat]),
+          "ios_non_empty": list(ios_sets[cat])}
+         for cat in all_cats],
+        key=lambda x: x["category"]
+    )
+
+
+# For each app pair, counts how many categories have a non-empty android/ios list, across the merged (common_permissions + permission_diffs) object
+def _agg_jitter_plot_data(collection):
+    results = []
+    for doc in collection:
+        merged = {**doc.get("common_permissions", {}), **doc.get("permission_diffs", {})}
+        android_count = sum(1 for v in merged.values() if len(v.get("android", [])) > 0)
+        ios_count = sum(1 for v in merged.values() if len(v.get("ios", [])) > 0)
+        results.append({"androidCount": android_count, "iosCount": ios_count})
+    return results
+
 
 def jitter_plot_about_permission_occurrences():
     def _jitter_plot(cursor, year: int):
@@ -740,21 +459,18 @@ def jitter_plot_about_permission_occurrences():
         plt.figure(figsize=(5, 5))
         plt.axline((0, 0), slope=1, color="grey", linestyle="--", linewidth=1)
         plt.grid(True, linestyle='--', alpha=0.5, zorder=-1)
-        plt.scatter(jitter_df['ios_jitter'], jitter_df['android_jitter'], alpha=0.6, edgecolor='black', zorder=2)
-        plt.xlabel("iOS Categories with Permissions", fontsize=14)
-        plt.ylabel("Android Categories with Permissions", fontsize=14)
-        #plt.title(f"Android vs iOS Permission Category Usage {year}", fontsize=10)
+        plt.scatter(jitter_df['ios_jitter'], jitter_df['android_jitter'], alpha=0.6, edgecolor='black', zorder=2, color="#006172")
+        plt.xlabel("iOS", fontsize=14)
+        plt.ylabel("Android", fontsize=14)
+        plt.ylim(-1, 16)
         plt.xticks(range(0,17), fontsize=12)
         plt.yticks(range(0,17), fontsize=12)
-        plt.savefig(os.path.join(PLOT_FOLDER_PATH, f"jitter_plot_permission_occurrences_{year}-({DATE}).pdf"), format="pdf")  
-        #plt.show()
- 
-    cursor = collection_2023.aggregate(_jitter_plot_data_aggregation())
-    _jitter_plot(cursor, 2023)
-    cursor = collection_2024.aggregate(_jitter_plot_data_aggregation())
-    _jitter_plot(cursor, 2024)
-    cursor = collection_2025.aggregate(_jitter_plot_data_aggregation())
-    _jitter_plot(cursor, 2025)
+        plt.savefig(os.path.join(PLOT_FOLDER_PATH, f"jitter_plot_permission_occurrences_{year}-({DATE}).pdf"), format="pdf")
+
+    _jitter_plot(_agg_jitter_plot_data(collection_2023), 2023)
+    _jitter_plot(_agg_jitter_plot_data(collection_2024), 2024)
+    _jitter_plot(_agg_jitter_plot_data(collection_2025), 2025)
+
 
 def cdf_permission_usage_android_ios():
     def _cdf_plot(cursor, year):
@@ -768,10 +484,9 @@ def cdf_permission_usage_android_ios():
         ios_c = Counter(ios)
 
         print(android_c)
-        
+
         df_android = pd.DataFrame({"_id": android_c.keys(), "android": android_c.values()}).sort_values('_id').reset_index(drop=True)
         df_ios = pd.DataFrame({"_id": ios_c.keys(), "ios": ios_c.values()}).sort_values('_id').reset_index(drop=True)
-        
 
         stats_df = pd.concat([df_android.set_index('_id'), df_ios.set_index('_id')], axis=1)
         stats_df = stats_df.fillna(0)
@@ -782,7 +497,7 @@ def cdf_permission_usage_android_ios():
         stats_df['cdf_android'] = stats_df['pdf_android'].cumsum()
         stats_df['cdf_ios'] = stats_df['pdf_ios'].cumsum()
         print(stats_df)
-        
+
         fig, ax = plt.subplots(figsize=(6, 4), dpi=150)
         colors = sns.color_palette("colorblind", 3)
         ax.plot(stats_df.index.to_list(), stats_df['cdf_android'], drawstyle='steps-post', label="Android", color=colors[0])
@@ -795,79 +510,32 @@ def cdf_permission_usage_android_ios():
         plt.yticks(np.arange(0,1.1,0.1), fontsize=14)
         plt.xlabel('# of Permission Categories', fontsize=14)
         plt.ylabel('CDF', fontsize=14)
-        #plt.title(f'CDF of Permission Distribution ({year})', fontsize=9)
         plt.grid(True, linestyle='--', linewidth=0.5, alpha=0.25, zorder=0)
         plt.legend(loc="lower right", fontsize=14, framealpha=1, markerscale=1)
         plt.tight_layout()
-        plt.savefig(os.path.join(PLOT_FOLDER_PATH, f"get_permission_cdf_ios_android_{year}-({DATE}).pdf"), format="pdf")  
-        #plt.show()
+        plt.savefig(os.path.join(PLOT_FOLDER_PATH, f"get_permission_cdf_ios_android_{year}-({DATE}).pdf"), format="pdf")
+
+    _cdf_plot(_agg_jitter_plot_data(collection_2023), 2023)
+    _cdf_plot(_agg_jitter_plot_data(collection_2024), 2024)
+    _cdf_plot(_agg_jitter_plot_data(collection_2025), 2025)
 
 
+# Iterates over permission_diffs per app pair, counts total occurrences and, how many have non-empty android/ios lists per category, returns top 5
+def _agg_get_top_most_differences(collection):
+    agg = defaultdict(lambda: {"android_count": 0, "ios_count": 0, "count": 0})
+    for doc in collection:
+        for category, v in doc.get("permission_diffs", {}).items():
+            agg[category]["count"] += 1
+            if len(v.get("android", [])) > 0:
+                agg[category]["android_count"] += 1
+            if len(v.get("ios", [])) > 0:
+                agg[category]["ios_count"] += 1
+    results = sorted(
+        [{"_id": cat, **counts} for cat, counts in agg.items()],
+        key=lambda x: -x["count"]
+    )
+    return results[:5]
 
-    cursor = collection_2023.aggregate(_jitter_plot_data_aggregation())
-    _cdf_plot(cursor, 2023)
-    cursor = collection_2024.aggregate(_jitter_plot_data_aggregation())
-    _cdf_plot(cursor, 2024)
-    cursor = collection_2025.aggregate(_jitter_plot_data_aggregation())
-    _cdf_plot(cursor, 2025)
-
-def _get_top_most_differences():
-    return [
-    {
-        '$project': {
-            'different': {
-                '$objectToArray': '$permission_diffs'
-            }
-        }
-    }, {
-        '$unwind': '$different'
-    }, {
-        '$addFields': {
-            'category': '$different.k', 
-            'android': '$different.v.android', 
-            'ios': '$different.v.ios'
-        }
-    }, {
-        '$group': {
-            '_id': '$different.k', 
-            'android_count': {
-                '$sum': {
-                    '$cond': [
-                        {
-                            '$gt': [
-                                {
-                                    '$size': '$android'
-                                }, 0
-                            ]
-                        }, 1, 0
-                    ]
-                }
-            }, 
-            'ios_count': {
-                '$sum': {
-                    '$cond': [
-                        {
-                            '$gt': [
-                                {
-                                    '$size': '$ios'
-                                }, 0
-                            ]
-                        }, 1, 0
-                    ]
-                }
-            }, 
-            'count': {
-                '$sum': 1
-            }
-        }
-    }, {
-        '$sort': {
-            'count': -1
-        }
-    }, {
-        '$limit': 5
-    }
-]
 
 def plot_top_5_different_categories_per_year():
     def _plot_top_differences(results, year):
@@ -878,18 +546,18 @@ def plot_top_5_different_categories_per_year():
                 'android': doc['android_count'],
                 'ios': doc['ios_count']
             }
-
         df = pd.DataFrame().from_dict(categories, orient="index")
-        
+
+        print(df)
+
         fig, ax = plt.subplots(figsize=(5, 4))
         p = ax.bar(df.index, df['counts'], color="#6C6C6C", edgecolor="black")
         plt.title(f"Top 5 Permission Categories with Most Differences ({year})", fontsize=10)
-        plt.ylabel("Number of Apps with Differences",fontsize=9)
+        plt.ylabel("Number of Apps with Differences", fontsize=9)
         plt.grid(axis='y', linestyle='--', alpha=0.5)
         plt.tight_layout()
         ax.bar_label(p)
-        #plt.savefig(os.path.join(PLOT_FOLDER_PATH, f"top_5_different_categories_{year}-({DATE}).pdf"), format="pdf")  
-        #plt.show()
+        #plt.savefig(os.path.join(PLOT_FOLDER_PATH, f"top_5_different_categories_{year}-({DATE}).pdf"), format="pdf")
         return df
 
     years = {
@@ -901,7 +569,7 @@ def plot_top_5_different_categories_per_year():
     global_df = pd.DataFrame()
 
     for year, col in years.items():
-        top = col.aggregate(_get_top_most_differences())
+        top = _agg_get_top_most_differences(col)
         df = _plot_top_differences(top, year)
         global_df = pd.concat([global_df, df.rename(columns={"counts": f"counts_{year}", "ios": f"ios_{year}", "android": f"android_{year}"})], axis=1)
         global_df[f'android_{year}_%'] = global_df[f'android_{year}'] / global_df[f'counts_{year}'] * 100
@@ -921,43 +589,46 @@ def plot_permissions_per_category_and_ios_android_per_year():
         both = []
         for doc in results:
             categories.append(doc['category'])
-            both_set = set()
             both_set = set(doc['ios_non_empty']) & set(doc['android_non_empty'])
             both.append(len(both_set))
             ios_only = set(doc['ios_non_empty']).difference(both_set)
             ios.append(len(ios_only))
             android_only = set(doc['android_non_empty']).difference(both_set)
             android.append(len(android_only))
-            #print(f"both: {len(both)}; ios only: {len(ios_only)}; ios total: {len(doc['ios_non_empty'])};android only: {len(android_only)}; android total: {len(doc['android_non_empty'])}")
+
+        categories_shortened = []
+        for category in categories:
+            if category == "Telephony Services":
+                categories_shortened.append("Tel. Services")
+            elif category == "Accessory Setup":
+                categories_shortened.append("Acc. Setup")
+            elif category == "Device Management":
+                categories_shortened.append("Device Mgmt.")
+            else:
+                categories_shortened.append(category)
 
         df = pd.DataFrame(
-            {'categories': categories,
+            {'categories': categories_shortened,
             'ios': ios,
             'android': android,
             'both': both
             })
-        
         df = df.sort_values(by=['both'], ascending=False)
-        
-        fig, ax = plt.subplots(figsize=(8, 4.5))
+
+        fig, ax = plt.subplots(figsize=(8, 3.5))
         plt.subplots_adjust(bottom=0.25)
         w = 0.45
         x_1 = [i - w/2 for i in range(len(categories))]
         x_2 = [i + w/2 for i in range(len(categories))]
-        
+
         ax.bar(x_1, df['both'], width=w, color="#202020", edgecolor="black", label="Both")
-        ax.bar(x_1, df['android'], bottom = df['both'], width=w, color="#727272", edgecolor="black", label="Android")
+        ax.bar(x_1, df['android'], bottom=df['both'], width=w, color="#727272", edgecolor="black", label="Android")
         ax.bar(x_2, df['both'], width=w, color="#202020", edgecolor="black")
-        ax.bar(x_2, df['ios'], bottom = df['both'], width=w, color="#CACACA", edgecolor="black", label="iOS")
+        ax.bar(x_2, df['ios'], bottom=df['both'], width=w, color="#CACACA", edgecolor="black", label="iOS")
+        ax.tick_params(axis='x', pad=0)
 
-        # df["sum_android"] = df['android'] + df['both']
-        # df["sum_ios"] = df["ios"] + df["both"]
-        # df["android_%"] = df["sum_android"] / 2964 *100
-        # df["ios_%"] = df["sum_ios"] / 2964 *100
-        # print(df)
-        # return
+        print(df)
 
-        #plt.title(f"Permissions per Category ({year})")
         plt.ylabel("Number of Apps", fontsize=14)
         plt.grid(axis='y', linestyle='--', alpha=0.5)
         ax.set_xticks(range(len(categories)))
@@ -967,119 +638,55 @@ def plot_permissions_per_category_and_ios_android_per_year():
         ax.legend(fontsize=14)
         plt.tight_layout()
         plt.margins(x=0.01)
-        plt.savefig(os.path.join(PLOT_FOLDER_PATH, f"permissions_per_category_{year}-({DATE})-updated.pdf"), format="pdf")  
-        #plt.show()
-    
+        plt.savefig(os.path.join(PLOT_FOLDER_PATH, f"permissions_per_category_{year}-({DATE})-updated.pdf"), format="pdf")
+
     years = {
         "2023": collection_2023,
         "2024": collection_2024,
         "2025": collection_2025,
     }
-
     for year, col in years.items():
-        top = col.aggregate(_app_permissions_per_mapping_category())
+        top = _agg_app_permissions_per_mapping_category(col)
         _bar_plot(top, year)
-#get_permission_distribution_of_differences_per_year()
 
 
-def _get_permission_cat_number_and_app_store_category_per_app_for():
-    return [
-    {
-        '$lookup': {
-            'from': 'ios_metadata_2023', 
-            'localField': 'ios_id', 
-            'foreignField': 'app_id', 
-            'as': 'metadata_result'
-        }
-    }, {
-        '$match': {
-            'metadata_result.0': {
-                '$exists': True
-            }
-        }
-    }, {
-        '$addFields': {
-            'metadata_result': {
-                '$first': '$metadata_result'
-            }
-        }
-    }, {
-        '$addFields': {
-            'genre': '$metadata_result.attributes.genreDisplayName'
-        }
-    }, {
-        '$addFields': {
-            'permission_diffs_array': {
-                '$objectToArray': '$permission_diffs'
-            }, 
-            'permission_common_array': {
-                '$objectToArray': '$common_permissions'
-            }
-        }
-    }, {
-        '$addFields': {
-            'permissions_array': {
-                '$concatArrays': [
-                    '$permission_diffs_array', '$permission_common_array'
-                ]
-            }
-        }
-    }, {
-        '$project': {
-            'permission_diffs_array': 0, 
-            'permission_common_array': 0
-        }
-    }, {
-        '$unwind': {
-            'path': '$permissions_array', 
-            'preserveNullAndEmptyArrays': False
-        }
-    }, {
-        '$addFields': {
-            'category': '$permissions_array.k', 
-            'android': '$permissions_array.v.android', 
-            'ios': '$permissions_array.v.ios'
-        }
-    }, {
-        '$group': {
-            '_id': '$ios_id', 
-            'docCount': {
-                '$sum': 1
-            }, 
-            'android_non_empty': {
-                '$sum': {
-                    '$cond': [
-                        {
-                            '$gt': [
-                                {
-                                    '$size': '$android'
-                                }, 0
-                            ]
-                        }, 1, 0
-                    ]
-                }
-            }, 
-            'ios_non_empty': {
-                '$sum': {
-                    '$cond': [
-                        {
-                            '$gt': [
-                                {
-                                    '$size': '$ios'
-                                }, 0
-                            ]
-                        }, 1, 0
-                    ]
-                }
-            }, 
-            'genre': {
-                '$first': '$genre'
-            }
-        }
-    }
-]
+def _load_metadata_lookup(path):
+    try:
+        with open(path) as fp:
+            metadata = json.load(fp)
+        return {doc["app_id"]: doc.get("app_store_category") for doc in metadata}
+    except FileNotFoundError:
+        print(f"WARNING: Metadata file not found at {path}. plot_permission_cats_per_app_store_category will be skipped.")
+        return None
 
-def plot_permission_cats_per_app_store_category():
+
+def _agg_get_permission_cat_number_and_app_store_category_per_app(collection, metadata_lookup):
+    results = []
+    for doc in collection:
+        ios_id = doc.get("ios_id")
+        # only skip apps that have no entry in the metadata json at all
+        if ios_id not in metadata_lookup:
+            print(f'iOS ID is not in metdata: {ios_id}')
+            continue
+        genre = metadata_lookup[ios_id]
+        merged = {**doc.get("permission_diffs", {}), **doc.get("common_permissions", {})}
+        android_count = sum(1 for v in merged.values() if len(v.get("android", [])) > 0)
+        ios_count = sum(1 for v in merged.values() if len(v.get("ios", [])) > 0)
+        results.append({
+            "_id": ios_id,
+            "docCount": len(merged),
+            "android_non_empty": android_count,
+            "ios_non_empty": ios_count,
+            "genre": genre,
+        })
+    return results
+
+
+def  plot_permission_cats_per_app_store_category():
+    metadata_lookup = _load_metadata_lookup(f"./data/permissions_paper.ios_metadata_2023.json")
+    if metadata_lookup is None:
+        return
+
     def _bar_plot(cursor, year):
         store_category_dict = {}
         for app in cursor:
@@ -1115,9 +722,7 @@ def plot_permission_cats_per_app_store_category():
         ax.legend()
         plt.tight_layout()
         plt.savefig(os.path.join(PLOT_FOLDER_PATH, f"permissions_avg_app_store_category_{year}-({DATE}).pdf"), format="pdf")
-
         return df
-        
 
     years = {
         "2023": collection_2023,
@@ -1126,84 +731,40 @@ def plot_permission_cats_per_app_store_category():
     }
     global_df = pd.DataFrame()
     for year, col in years.items():
-        cursor = col.aggregate(_get_permission_cat_number_and_app_store_category_per_app_for())
+        cursor = _agg_get_permission_cat_number_and_app_store_category_per_app(col, metadata_lookup)
         df = _bar_plot(cursor, year)
         global_df = pd.concat([global_df, df[['android_avg','ios_avg']].rename(columns={"ios_avg": f"ios_avg_{year}", "android_avg": f"android_avg_{year}"})], axis=1)
 
-    #print(global_df)
     print(global_df.round(decimals=2).iloc[:, [0, 2, 4, 1, 3, 5]].to_latex(index=True))
     print(global_df.round(decimals=2).to_latex(index=True))
-
     print(global_df['ios_avg_2023'] - global_df['android_avg_2023'])
     print(global_df['ios_avg_2025'] - global_df['android_avg_2025'])
 
 
-def _get_permission_distribution_android_ios():
-    return [
-    {
-        '$addFields': {
-            'merged': {
-                '$mergeObjects': [
-                    '$common_permissions', '$permission_diffs'
-                ]
-            }
-        }
-    }, {
-        '$addFields': {
-            'mergedArray': {
-                '$objectToArray': '$merged'
-            }
-        }
-    }, {
-        '$unwind': {
-            'path': '$mergedArray', 
-            'preserveNullAndEmptyArrays': False
-        }
-    }, {
-        '$addFields': {
-            'category': '$mergedArray.k', 
-            'android': '$mergedArray.v.android', 
-            'ios': '$mergedArray.v.ios'
-        }
-    }, {
-        '$group': {
-            '_id': '$mergedArray.k', 
-            'android_non_empty': {
-                '$addToSet': {
-                    '$cond': [
-                        {
-                            '$gt': [
-                                {
-                                    '$size': '$android'
-                                }, 0
-                            ]
-                        }, '$ios_id', '$$REMOVE'
-                    ]
-                }
-            }, 
-            'ios_non_empty': {
-                '$addToSet': {
-                    '$cond': [
-                        {
-                            '$gt': [
-                                {
-                                    '$size': '$ios'
-                                }, 0
-                            ]
-                        }, '$ios_id', '$$REMOVE'
-                    ]
-                }
-            }, 
-            'count': {
-                '$sum': 1
-            }
-        }
-    }, {
-        '$sort': {
-            'count': -1
-        }
-    }
-]
+# Merges common_permissions + permission_diffs, then for each category collects the set of ios_ids that have a non-empty android/ios list, plus total count
+def _agg_get_permission_distribution_android_ios(collection):
+    android_sets = defaultdict(set)
+    ios_sets = defaultdict(set)
+    counts = defaultdict(int)
+    for doc in collection:
+        ios_id = doc.get("ios_id")
+        merged = {**doc.get("common_permissions", {}), **doc.get("permission_diffs", {})}
+        for category, v in merged.items():
+            counts[category] += 1
+            if len(v.get("android", [])) > 0:
+                android_sets[category].add(ios_id)
+            if len(v.get("ios", [])) > 0:
+                ios_sets[category].add(ios_id)
+    all_cats = set(counts.keys())
+    return sorted(
+        [{"_id": cat,
+          "android_non_empty": list(android_sets[cat]),
+          "ios_non_empty": list(ios_sets[cat]),
+          "count": counts[cat]}
+         for cat in all_cats],
+        key=lambda x: -x["count"]
+    )
+
 
 def get_growth_rate_of_permission_categories_android_vs_ios():
     years = {
@@ -1212,40 +773,31 @@ def get_growth_rate_of_permission_categories_android_vs_ios():
     }
     global_df = pd.DataFrame()
     for year, col in years.items():
-        cursor = col.aggregate(_get_permission_distribution_android_ios())
-        
+        cursor = _agg_get_permission_distribution_android_ios(col)
         cat_dict = {}
         for item in cursor:
             cat_dict[item['_id']] = {
                 f'android_{year}': len(item['android_non_empty']),
                 f'ios_{year}': len(item['ios_non_empty']),
-                #f'total_{year}': item['count']
             }
-
         df = pd.DataFrame().from_dict(cat_dict, orient="index")
         global_df = pd.concat([global_df, df], axis=1)
-    
+
     global_df['android_growth_total'] = (global_df['android_2025'] - global_df['android_2023'])
-    global_df['android_growth_%'] = ( ((global_df['android_2025'] - global_df['android_2023']) / global_df['android_2023']) * 100).round(1)
+    global_df['android_growth_%'] = (((global_df['android_2025'] - global_df['android_2023']) / global_df['android_2023']) * 100).round(1)
     global_df['ios_growth_total'] = (global_df['ios_2025'] - global_df['ios_2023'])
-    global_df['ios_growth_%'] =  (((global_df['ios_2025'] - global_df['ios_2023']) / global_df['ios_2023']) * 100).round(1)
+    global_df['ios_growth_%'] = (((global_df['ios_2025'] - global_df['ios_2023']) / global_df['ios_2023']) * 100).round(1)
     global_df['android_ios_diff'] = global_df['android_growth_total'] - global_df['ios_growth_total']
-    #print(global_df.fillna(0).apply(pd.to_numeric, downcast='integer').sort_values('android_ios_diff', ascending=False).to_latex())
-    #print(global_df['android_growth_%'].sort_values())
-    print(global_df["ios_growth_%"].sort_values())
-    #print(global_df)
+    print(global_df.fillna(0).apply(pd.to_numeric, downcast='integer').sort_values('android_ios_diff', ascending=False).to_latex())
+
 
 def get_avg_permissions_per_app():
-    apps_2023 = collection_2023.find({})
-    apps_2024 = collection_2024.find({})
-    apps_2025 = collection_2025.find({})
-
     years = {
-        "2023": apps_2023,
-        "2024": apps_2024,
-        "2025": apps_2025
+        "2023": collection_2023,
+        "2024": collection_2024,
+        "2025": collection_2025
     }
-
+    
     for year, apps in years.items():
         android_permissions = []
         ios_permissions = []
@@ -1266,16 +818,15 @@ def get_avg_permissions_per_app():
         print("---------------------------------------------------------")
 
 
-
-#get_growth_rate_of_permission_categories_android_vs_ios()
-#get_permission_distribution_of_differences_per_year()
-#get_permission_distribution_cdf()
-#get_changes_of_permission_diffs()
-#get_differences_among_categories()
-#plot_differences_added_removed_across_categories()
-#jitter_plot_about_permission_occurrences()
-#cdf_permission_usage_android_ios()
-#plot_top_5_different_categories_per_year()
-#plot_permissions_per_category_and_ios_android_per_year()
-#plot_permission_cats_per_app_store_category()
+get_growth_rate_of_permission_categories_android_vs_ios()
+get_permission_distribution_of_differences_per_year()
+get_permission_distribution_cdf()
+get_changes_of_permission_diffs()
+get_differences_among_categories()
+plot_differences_added_removed_across_categories()
+jitter_plot_about_permission_occurrences()
+cdf_permission_usage_android_ios()
+plot_top_5_different_categories_per_year()
+plot_permissions_per_category_and_ios_android_per_year()
+plot_permission_cats_per_app_store_category()
 get_avg_permissions_per_app()
