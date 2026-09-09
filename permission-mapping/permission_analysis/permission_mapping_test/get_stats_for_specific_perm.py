@@ -17,10 +17,10 @@ app_set_2025 = set()
 app_set_other_2023 = set()
 app_set_other_2025 = set()
 
-with open("./data/permissions_paper.matches_w_permissions_2023.json", "r") as fp:
+with open("./data/matches_w_permissions_2023.json", "r") as fp:
     apps_2023 = json.load(fp)
 
-with open("./data/permissions_paper.matches_w_permissions_2025.json", "r") as fp:
+with open("./data/matches_w_permissions_2025.json", "r") as fp:
     apps_2025 = json.load(fp)
 
 

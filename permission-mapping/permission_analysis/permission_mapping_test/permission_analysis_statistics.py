@@ -12,13 +12,13 @@ PLOT_FOLDER_PATH = "./plots_28_07_2026_no_mongo"
 os.makedirs(PLOT_FOLDER_PATH, exist_ok=True)
 
 
-with open(f"./data/permissions_paper.permission_diffs_2023-filtered-({DATE}).json") as fp:
+with open(f"./data/permission_diffs_2023-filtered-({DATE}).json") as fp:
     collection_2023 = json.load(fp)
 
-with open(f"./data/permissions_paper.permission_diffs_2024-filtered-({DATE}).json") as fp:
+with open(f"./data/permission_diffs_2024-filtered-({DATE}).json") as fp:
     collection_2024 = json.load(fp)
 
-with open(f"./data/permissions_paper.permission_diffs_2025-filtered-({DATE}).json") as fp:
+with open(f"./data/permission_diffs_2025-filtered-({DATE}).json") as fp:
     collection_2025 = json.load(fp)
 
 
@@ -683,7 +683,7 @@ def _agg_get_permission_cat_number_and_app_store_category_per_app(collection, me
 
 
 def  plot_permission_cats_per_app_store_category():
-    metadata_lookup = _load_metadata_lookup(f"./data/permissions_paper.ios_metadata_2023.json")
+    metadata_lookup = _load_metadata_lookup(f"./data/ios_metadata_2023.json")
     if metadata_lookup is None:
         return
 

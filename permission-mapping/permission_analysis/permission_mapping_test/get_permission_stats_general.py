@@ -3,10 +3,10 @@ import json
 
 
 def get_app_json(year: str):
-    return f"./data/permissions_paper.matches_w_permissions_{year}.json"
+    return f"./data/matches_w_permissions_{year}.json"
 
 filtered_apps = {}
-with open("./data/permissions_paper.filtered_app_ids-(08-08-2025).json", "r") as fp:
+with open("./data/filtered_app_ids-(08-08-2025).json", "r") as fp:
     filtered_apps = json.load(fp)
 
 filtered_app_ids = [item.get("_id") for item in filtered_apps]
