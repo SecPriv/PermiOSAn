@@ -90,21 +90,26 @@ By executing Experiment 1, our Figures 2, 3, 4, and 5, as well as our Tables
 2, 3, and 6. The respective functions in the script each describe a Figure or 
 Table.
 
-#### Main Result 2: Verifying the Jaccard Similarity
+#### Main Result 2: Get Adaptation of Android-only and iOS-only Permissions
+By executing Experiment 2, our Tables 4 and 5 can be verified, as the 
+script generates the usage statistics of Android-only and iOS-only permissions
+per year. For our results presented in the paper, only 2025 is relevant.
+
+#### Main Result 3: Verifying the Jaccard Similarity
 
 Our paper claims that, across all XPPCs, we observe an average Jaccard
 similarity of 0.59 (median: 0.50), indicating a moderate degree of
 similarity between the two platforms’ permission-granting entities.
-This claim is reproducible by executing our Experiment 2. In this 
+This claim is reproducible by executing our Experiment 3. In this 
 Experiment we calculate the Jaccard similarity of all XPPCs based on 
 our mapping results (from Table 11).
 
-#### Main Result 3: Verifying Cohen's Kappa
+#### Main Result 4: Verifying Cohen's Kappa
 
 Our paper claims that In 306 (88.4%) cases, the two researchers 
 assigned the same group to permissions accross Android and iOS and we 
 measured an inter-rater reliability using Cohen’s Kappa (𝜅 = 0.86).
-This claim is reproducible by executing our Experiment 3. In this
+This claim is reproducible by executing our Experiment 4. In this
 Experiment we calculate the Cohen's Kappa based on the provided 
 group assignments of both coders.
 
@@ -122,10 +127,10 @@ List each experiment to execute to reproduce your results. Describe:
 - Storage: <10GB
 
 To verify the numbers and measurements presented in the paper's tables and figures,
-run the following scripts **in order** from the `permission_mapping_test/` directory:
+run the following scripts **in order** from the `permission_analysis/` directory:
 
 ```bash
-cd permission_mapping_test
+cd permission_analysis
 python permission_analysis.py
 python process_json.py
 python filter_permission_diffs.py
@@ -137,7 +142,22 @@ python permission_analysis_statistics.py
 This generates all tables and figures that were used in the paper. 
 The expected result is that the generated figures match the figures from the paper provided in `permission_mapping/permission_analysis/plots_28_07_2026`.
 
-#### Experiment 2: Verifying the Jaccard Similarity
+#### Experiment 2: Get Adaptation of Android-only and iOS-only Permissions
+
+- Time: < 5m
+- Storage: <10GB
+
+To get the numbers of Android-only and iOS-only permissions and verify Table 4 and Table 5
+
+```bash
+cd permission_analysis
+python get_permission_stats_no_mapping.py
+```
+
+This generates a json file per year with the respective usage stats for Android-only and iOS-only permissions,
+in files named `./no_mapping_permission_stats_{year}.json`.
+
+#### Experiment 3: Verifying the Jaccard Similarity
 
 - Time: < 5m
 - Storage: <10GB
@@ -152,7 +172,7 @@ python main.py
 
 This generates the value of the Jaccard Similarity we provide in Chapter 3.3 `Underlying Permission-Granting Mechanisms`.
 
-#### Experiment 3: Verifying Cohen's Kappa
+#### Experiment 4: Verifying Cohen's Kappa
 - Time: < 5m
 - Storage: <10GB
 
