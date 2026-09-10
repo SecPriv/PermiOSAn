@@ -207,14 +207,24 @@ overhead) vary in another manner (e.g., exponentially). Refer to the related
 sections, figures, and/or tables in your paper and reference the experiments
 that support this result/claim. See example below.
 
-#### Main Result 2: Example Name
+#### Main Result 2: Verifying the Jaccard Similarity
 
-Our paper claims that when varying the file size linearly, the runtime also
-increases linearly. This claim is reproducible by executing our
-[Experiment 2](#experiment-2-example-name). In this experiment, we change the
-file size linearly, from 2KB to 24KB, at intervals of 2KB each, and we show that
-the runtime also increases linearly, reaching at most 1ms. We report these
-results in "Figure 1a" and "Table 3" (Column 3 or Row 2) of our paper.
+Our paper claims that, across all XPPCs, we observe an average Jaccard
+similarity of 0.59 (median: 0.50), indicating a moderate degree of
+similarity between the two platforms’ permission-granting entities.
+This claim is reproducible by executing our Experiment 2. In this 
+Experiment we calculate the Jaccard similarity of all XPPCs based on 
+our mapping results (from Table 11).
+
+#### Main Result 3: Verifying Cohen's Kappa
+
+Our paper claims that In 306 (88.4%) cases, the two researchers 
+assigned the same group to permissions accross Android and iOS and we 
+measured an inter-rater reliability using Cohen’s Kappa (𝜅 = 0.86).
+This claim is reproducible by executing our Experiment 3. In this
+Experiment we calculate the Cohen's Kappa based on the provided 
+group assignments of both coders.
+
 
 ### Experiments
 List each experiment to execute to reproduce your results. Describe:
