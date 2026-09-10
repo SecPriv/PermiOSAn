@@ -1,9 +1,10 @@
 import numpy as np
 import json
 
+DATE = "28-07-2026"
 
 def get_app_json(year: str):
-    return f"./data/matches_w_permissions_{year}.json"
+    return f"./data/matches_w_permissions_{year}_bind_({DATE}).json"
 
 filtered_apps = {}
 with open("./data/filtered_app_ids-(08-08-2025).json", "r") as fp:
