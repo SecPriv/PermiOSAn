@@ -16,13 +16,10 @@ maintainers = [
 ]
 readme = "README.md"
 # homepage
-repository = "anonymous"
-documentation = "anonymous"
+repository = "https://github.com/SecPriv/PermiOSAn"
+documentation = "https://github.com/SecPriv/PermiOSAn"
 # keywords
 # classifiers
-packages = [
-    { include = "xpa" },
-]
 
 
 # Main project dependencies

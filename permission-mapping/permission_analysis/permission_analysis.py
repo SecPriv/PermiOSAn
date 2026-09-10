@@ -1,3 +1,10 @@
+#!/usr/bin/env -S uv run --script
+#
+# /// script
+# requires-python = ">=3.12"
+# dependencies = ["pandas", "matplotlib"]
+# ///
+
 import json
 import pandas as pd
 import matplotlib.pyplot as plt

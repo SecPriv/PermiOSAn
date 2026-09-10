@@ -6,22 +6,18 @@ This repository contains the code and data to reproduce the results presented in
 
 ## Prerequisites
 
-Before running any scripts, ensure you have Python 3 and [Poetry](https://python-poetry.org/docs/#installation) installed, then install the dependencies:
+Before running any scripts, ensure you have Python 3 and [uv](https://docs.astral.sh/uv/getting-started/installation/) installed.
 
-```bash
-poetry install
-```
-
-Then activate the virtual environment with `poetry shell` before running any of the scripts below, or prefix each command with `poetry run` if you prefer not to activate the shell.
+The scripts use uv's hashbang execution and should install dependencies automatically.
 
 
 ## Reproducing Tables and Figures
 
 To verify the statistics and measurements presented in the paper's tables and figures,
-run the following scripts **in order** from the `permission_mapping_test/` directory:
+run the following scripts **in order** from the `permission_mapping/` directory:
 
 ```bash
-cd permission_mapping_test
+cd permission_analysis
 python permission_analysis.py
 python process_json.py
 python filter_permission_diffs.py
