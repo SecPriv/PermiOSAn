@@ -1,108 +1,40 @@
 # Artifact Appendix (Required for all badges)
 
-Paper title: **Enter the exact title of your PETS accepted paper here**
+Paper title: **Mapping Android and iOS Permissions Across Space and Time**
 
 Requested Badge(s):
-  - [ ] **Available**
-  - [ ] **Functional**
-  - [ ] **Reproduced**
-
-Authors can provide this content _either_ as a separate file in their artifact
-_or_ as part of their existing documentation (e.g., `README.md`). In the latter
-case, you should have the same section titles as in this template.
-
-This template includes several placeholders. When filling in this template for
-their artifact, the authors should:
-
-1. Remove this note.
-2. Delete the sections that are _not_ required for the badge(s) they are
-   applying for.
-3. Omit suffixes of the form "(required/encouraged for badge ...)" from the
-   section titles.
-4. Authors should not leave the placeholder descriptions initially provided with
-   this file into the submitted version with their artifact.
-
-While this template is provided for artifact review, you should write your
-instructions for someone trying to reuse your artifact in the future (i.e., not
-an artifact reviewer).
+  - [x] **Available**
+  - [x] **Functional**
+  - [x] **Reproduced**
 
 ## Description (Required for all badges)
-Replace this with the following:
 
-1. List the paper that the artifact relates to (i.e., paper title, authors,
-   year, or even a BibTex cite).
-2. A short description of your artifact and how it is relevant to your paper.
+This codebase is the artifact related to the paper **Mapping Android and iOS Permissions Across Space and Time** (PETS 2027) 
+Authors: Magdalena Steinböck, Jakob Bleier, Florian Draschbacher, Christine Utz, Tobias Urban, Martina Lindorfer
+
+The artifact contains the relevant data and scripts to reproduce the Figures and Tables provided in the paper.
 
 ### Security/Privacy Issues and Ethical Concerns (Required for all badges)
 
-Replace this with a description of security or privacy risks that your artifact
-may hold for the machine of the person trying to evaluate or reuse your
-artifact. This is especially relevant for artifacts that _disable a security
-mechanism_, such as a firewall, ASLR, etc., to demonstrate an attack, as well as
-to artifacts that _run vulnerable code_, such as exploits, malware samples,
-etc., to demonstrate a vulnerability.
-
-User study artifacts that include anonymized transcripts or survey responses
-should list the ethical review / IRB process followed to obtain participants'
-consent to publishing this anonymized dataset. They may also list how
-participants were compensated.
+The artifact raises no ethical concerns or security/privacy issues.
 
 ## Basic Requirements (Required for Functional and Reproduced badges)
 
-For both sections below, if you are giving reviewers remote access to special
-hardware (e.g., Intel SGX v2.0) or proprietary software (e.g., Matlab R2025a)
-for the purpose of the artifact evaluation, do not provide these instructions
-here but rather in the corresponding submission field on HotCRP.
-
 ### Hardware Requirements (Required for Functional and Reproduced badges)
 
-Replace this with the following:
-
-1. A list of the _minimal hardware requirements_ to execute your artifact. If no
-   specific hardware is needed, then state "Can run on a laptop (No special
-   hardware requirements)". You may state how a researcher could gain access to
-   that hardware, e.g., by buying, renting, or even emulating it.
-2. When applying for the "Reproduced" badge, list _the specifications of the
-   hardware_ on which the experiments reported in the paper were performed. This
-   is especially relevant in cases were results might be influenced by the
-   hardware used (e.g., latency, bandwidth, throughput experiments, etc.).
-3. If your experiments require significant hardware resources (e.g., more than 8
-   CPU cores, more than 16GB RAM) consider providing experiments with reduced
-   scale, especially for the "Functional" badge.
+1. Can run on a laptop (No special hardware requirements)
+2. The experiments were conducted using a MacBook Pro M1, 16GM RAM, 500GB storage, and verified on a Linux machine with similar specs.
 
 ### Software Requirements (Required for Functional and Reproduced badges)
 
 Replace this with the software required to run your artifact and its versions,
 as follows.
 
-1. List the OS you used to run your artifact, along with its version (e.g.,
-   Ubuntu 22.04). If your artifact can only run on a specific OS or a specific
-   OS version, list it and explain why here. In general, your artifact reviewers
-   will probably have access to a machine with a different OS or different OS
-   version than yours; they should still be able to run appropriately packaged
-   artifacts.
-2. List the OS packages that your artifact requires, along with their versions.
-3. Artifact packaging: If you use a container runtime (e.g., Docker) to run the
-   artifact, list the container runtime and its version (e.g., Docker 23.0.3).
-   If you use VMs, list the hypervisor (e.g., VirtualBox) to run the artifact.
-4. List the programming language compiler or interpreter you used to run your
-   artifact (e.g., Python 3.13.7). Your Docker image or VM image should have
-   this version of the programming languages installed already. Your Dockerfile
-   should start from a base image with this programming language version.
-5. List packages that your artifact depends on, along with their versions. For
-   example, Python-based privacy-preserving machine learning artifacts typically
-   require `numpy`, `scipy`, etc. You may point to a file in your artifact with
-   this list, such as a `requirements.txt` file. If you rely on proprietary
-   software (e.g. Matlab R2025a), list this here and consider providing access
-   to reviewers through HotCRP.
-6. List any machine learning models required to run your artifact, along with
-   their versions. If your model is hosted on a different repository, such as on
-   Zenodo, then your artifact should download it automatically (same for
-   datasets). If a required ML model is _not_ in your artifact, provide a dummy
-   model to demonstrate the functionality of the rest of your artifact.
-7. List any datasets required to run your artifact. If any required dataset is
-   not in your artifact, you should provide a synthetic dataset that showcases
-   the expected data format.
+1. We tested the artifact on macOS Sequoia 15.7.4 as well as on Ubuntu 24.04.
+2. The artifact was tested using Python 3.12.4. The required python packages are provided in
+   the script files themselves.
+3. TODO Jakob
+4. Datasets required to run our artifact are provided in `permission_mapping/permission_analysis/data`.
 
 ### Estimated Time and Storage Consumption (Required for Functional and Reproduced badges)
 
@@ -126,37 +58,17 @@ everything and how to verify that everything is set up correctly.
 
 ### Accessibility (Required for all badges)
 
-Replace the following by a description of how to access your artifact via
-persistent sources. Valid hosting options are institutional and third-party
-digital repositories (e.g., GitHub, Gitlab, BitBucket, Zenodo, Figshare, etc.).
-Please do not use personal web pages or cloud storage services like Google
-Drive, Dropbox, etc.
-
-Note that once your artifact evaluation is finalized and a badge decision has
-been made, artifact chairs will collect a stable and persistent reference to
-your artifact to list on the website. For version-controlled repositories (e.g.,
-Git repositories), this will be a specific commit-id or tag.
-
-You _should not_ link to a specific commit here at submission time, as changes
-will likely happen during the evaluation process to address the reviewers'
-feedback, resulting in the link being out-of-date. Instead, you may link to the
-latest commit in your branch (e.g. main) as follows:
-https://github.com/PoPETS-AEC/example-docker-python-pip/tree/main
+Our Artifact is available at GitHub under `https://github.com/SecPriv/PermiOSAn/`.
 
 ### Set Up the Environment (Required for Functional and Reproduced badges)
 
-Replace the following by a description of how one should set up the environment
-for your artifact, including downloading and installing dependencies and the
-installation of the artifact itself (i.e., from the very first download or clone
-command one should perform). Be as specific as possible here. If possible, use
-code segments to simplify the workflow, e.g.,
+To set up our artifact, first clone it from GitHub:
 
 ```bash
-git clone https://github.com/PoPETS-AEC/example-docker-python-pip.git
-docker build -t example-docker-python-pip:main .
+git clone git@github.com:SecPriv/PermiOSAn.git
 ```
 
-Describe the expected results where it makes sense to do so.
+TODO Jakob
 
 ### Testing the Environment (Required for Functional and Reproduced badges)
 
@@ -184,12 +96,9 @@ Then within the Docker container, run:
 
 Include the expected output.
 
-## Artifact Evaluation (Required for Functional and Reproduced badges)
+TODO Jakob
 
-This section should include all the steps required to evaluate your artifact's
-functionality and validate your paper's key results and claims. Therefore,
-highlight your paper's main results and claims in the first subsection. And
-describe the experiments that support your claims in the subsection after that.
+## Artifact Evaluation (Required for Functional and Reproduced badges)
 
 ### Main Results and Claims
 
@@ -281,18 +190,11 @@ This generates the value of the Cohen's Kappa we provide in Chapter 3.2.
 
 ## Limitations (Required for Functional and Reproduced badges)
 
-Describe which steps, experiments, results, graphs, tables, etc. are _not
-reproducible_ with the provided artifact. Explain why this is not
-included/possible and argue why the artifact should _still_ be evaluated for the
-respective badges.
+We provide all extracted data and code to reproduce the figures and numbers in the paper. 
+The app packages are not public, but can be shared on request together with their static analysis scripts.
 
 ## Notes on Reusability (Encouraged for all badges)
 
-First, this section might not apply to your artifacts. Describe how your
-artifact can be used beyond your research paper, e.g., as a general framework.
-The overall goal of artifact evaluation is not only to reproduce and verify your
-research but also to help other researchers to re-use and extend your artifacts.
-Discuss how your artifacts can be adapted to other settings, e.g., more input
-dimensions, other datasets, and other behavior, through replacing individual
-modules and functionality or running more iterations of a specific module.
-
+Our main contribution that can be reused by other researchers is our permission mapping of 
+permissions on Android and iOS, which we provide in a machine-readable json format in
+`permission_mapping/permission_analysis/data/permission_mapping.json`.
