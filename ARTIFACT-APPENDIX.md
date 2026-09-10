@@ -207,14 +207,24 @@ overhead) vary in another manner (e.g., exponentially). Refer to the related
 sections, figures, and/or tables in your paper and reference the experiments
 that support this result/claim. See example below.
 
-#### Main Result 2: Example Name
+#### Main Result 2: Verifying the Jaccard Similarity
 
-Our paper claims that when varying the file size linearly, the runtime also
-increases linearly. This claim is reproducible by executing our
-[Experiment 2](#experiment-2-example-name). In this experiment, we change the
-file size linearly, from 2KB to 24KB, at intervals of 2KB each, and we show that
-the runtime also increases linearly, reaching at most 1ms. We report these
-results in "Figure 1a" and "Table 3" (Column 3 or Row 2) of our paper.
+Our paper claims that, across all XPPCs, we observe an average Jaccard
+similarity of 0.59 (median: 0.50), indicating a moderate degree of
+similarity between the two platforms’ permission-granting entities.
+This claim is reproducible by executing our Experiment 2. In this 
+Experiment we calculate the Jaccard similarity of all XPPCs based on 
+our mapping results (from Table 11).
+
+#### Main Result 3: Verifying Cohen's Kappa
+
+Our paper claims that In 306 (88.4%) cases, the two researchers 
+assigned the same group to permissions accross Android and iOS and we 
+measured an inter-rater reliability using Cohen’s Kappa (𝜅 = 0.86).
+This claim is reproducible by executing our Experiment 3. In this
+Experiment we calculate the Cohen's Kappa based on the provided 
+group assignments of both coders.
+
 
 ### Experiments
 List each experiment to execute to reproduce your results. Describe:
@@ -224,39 +234,54 @@ List each experiment to execute to reproduce your results. Describe:
  - How much space it consumes on disk (approximately) (omit if <10GB).
  - Which claim and results does it support, and how.
 
-#### Experiment 1: Name
-- Time: replace with estimate in human-minutes/hours + compute-minutes/hours.
-- Storage: replace with estimate for disk space used (omit if <10GB).
+#### Experiment 1: Reproducing Tables and Figures
+- Time: < 10m
+- Storage: <10GB
 
-Provide a short explanation of the experiment and expected results. Describe
-thoroughly the steps to perform the experiment and to collect and organize the
-results as expected from your paper (see example below). Use code segments to
-simplify the workflow, as follows.
+To verify the numbers and measurements presented in the paper's tables and figures,
+run the following scripts **in order** from the `permission_mapping_test/` directory:
 
 ```bash
-python3 experiment_1.py
+cd permission_mapping_test
+python permission_analysis.py
+python process_json.py
+python filter_permission_diffs.py
+python permission_analysis_statistics.py
 ```
 
-#### Experiment 2: Example Name
+> **Note:** Scripts must be run sequentially, as each step depends on the output of the previous one.
 
-- Time: 10 human-minutes + 3 compute-hours
-- Storage: 20GB
+This generates all tables and figures that were used in the paper. 
+The expected result is that the generated figures match the figures from the paper provided in `permission_mapping/permission_analysis/plots_28_07_2026`.
 
-This example experiment reproduces
-[Main Result 2: Example Name](#main-result-2-example-name), the following script
-will run the simulation automatically with the different parameters specified in
-the paper. (You may run the following command from the example Docker image.)
+#### Experiment 2: Verifying the Jaccard Similarity
+
+- Time: < 5m
+- Storage: <10GB
+
+To reproduce the Jaccard Similarity scores measuring the degree of overlap between
+XPPCs with shared entities, run the following from the `jaccard_similarity/` directory:
 
 ```bash
-python3 main.py
+cd jaccard_similarity
+python main.py
 ```
 
-Results from this example experiment will be aggregated over several iterations
-by the script and output directly in raw format along with variances and
-standard deviations in the `output-folder/` directory. You will also find there
-the plots for "Figure 1a" in `.pdf` format and the table for "Table 3" in `.tex`
-format. These can be directly compared to the results reported in the paper, and
-should not quantitatively vary by more than 5% from expected results.
+This generates the value of the Jaccard Similarity we provide in Chapter 3.3 `Underlying Permission-Granting Mechanisms`.
+
+#### Experiment 3: Verifying Cohen's Kappa
+- Time: < 5m
+- Storage: <10GB
+
+To reproduce the Cohen's Kappa inter-rater reliability score for our codebook-based
+permission mapping approach, run the following from the `permission_analysis/` directory:
+
+```bash
+cd permission_analysis
+python calculate_cohens_kappa.py
+```
+
+This generates the value of the Cohen's Kappa we provide in Chapter 3.2.
 
 
 ## Limitations (Required for Functional and Reproduced badges)
