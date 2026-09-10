@@ -1,11 +1,11 @@
 granted by,iOS,Category,Android,granted by,protection level
-device,com.apple.developer.accessory-setup-discovery-extension,Accessory Setup,REQUEST_COMPANION_PROFILE_GLASSES,device,normal
-,,Accessory Setup,REQUEST_COMPANION_PROFILE_WATCH,device,normal
-,,Accessory Setup,REQUEST_COMPANION_RUN_IN_BACKGROUND,device,normal
-,,Accessory Setup,REQUEST_COMPANION_START_FOREGROUND_SERVICES_FROM_BACKGROUND,device,normal
-,,Accessory Setup,REQUEST_COMPANION_USE_DATA_IN_BACKGROUND,device,normal
-,,Accessory Setup,REQUEST_OBSERVE_COMPANION_DEVICE_PRESENCE,device,normal
-,,Accessory Setup,DELIVER_COMPANION_MESSAGES,device,normal
+device,com.apple.developer.accessory-setup-discovery-extension,AccessorySetup,REQUEST_COMPANION_PROFILE_GLASSES,device,normal
+,,AccessorySetup,REQUEST_COMPANION_PROFILE_WATCH,device,normal
+,,AccessorySetup,REQUEST_COMPANION_RUN_IN_BACKGROUND,device,normal
+,,AccessorySetup,REQUEST_COMPANION_START_FOREGROUND_SERVICES_FROM_BACKGROUND,device,normal
+,,AccessorySetup,REQUEST_COMPANION_USE_DATA_IN_BACKGROUND,device,normal
+,,AccessorySetup,REQUEST_OBSERVE_COMPANION_DEVICE_PRESENCE,device,normal
+,,AccessorySetup,DELIVER_COMPANION_MESSAGES,device,normal
 device,com.apple.developer.authentication-services.autofill-credential-provider,Authentication,BIND_CREDENTIAL_PROVIDER_SERVICE,device,bindIC
 ,,Authentication,BIND_AUTOFILL_SERVICE,device,normal
 user,NSFaceIDUsageDescription,Biometrics,USE_BIOMETRIC,device,normal
@@ -20,7 +20,7 @@ user,NSCameraUsageDescription,Camera,CAMERA,user,dangerous
 ,,Camera,FOREGROUND_SERVICE_CAMERA,device,normal
 user,NSContactsUsageDescription,Contacts,READ_CONTACTS,user,dangerous
 vendor,com.apple.developer.contacts.notes,Contacts,WRITE_CONTACTS,user,dangerous
-user,NSLocalNetworkUsageDescription,Local Network,NEARBY_WIFI_DEVICES,user,dangerous
+user,NSLocalNetworkUsageDescription,LocalNetwork,NEARBY_WIFI_DEVICES,user,dangerous
 device,com.apple.developer.location.push,Location,ACCESS_COARSE_LOCATION,user,dangerous
 user,NSLocationAlwaysAndWhenInUseUsageDescription,Location,ACCESS_FINE_LOCATION,user,dangerous
 user,NSLocationWhenInUseUsageDescription,Location,ACCESS_BACKGROUND_LOCATION,vendor,dangerous
@@ -59,108 +59,108 @@ vendor,com.apple.developer.nfc.hce.iso7816.select-identifier-prefixes,NFC,BIND_N
 vendor,com.apple.developer.nfc.hce.default-contactless-app,NFC,,,
 user,NSUserNotificationsUsageDescription,Notification,POST_NOTIFICATIONS,user,dangerous
 device,aps-environment,Notification,,,
-device,com.apple.developer.calling-app,Telephony Services,READ_CALL_LOG,vendor,dangerous
-device,com.apple.developer.dialing-app,Telephony Services,ACCEPT_HANDOVER,user,dangerous
-vendor,com.apple.CommCenter.fine-grained,Telephony Services,ADD_VOICEMAIL,user,dangerous
-device,com.apple.developer.networking.carrier-constrained.appcategory,Telephony Services,CALL_PHONE,user,dangerous
-device,com.apple.developer.networking.carrier-constrained.app-optimized,Telephony Services,WRITE_CALL_LOG,vendor,dangerous
-,,Telephony Services,READ_PHONE_NUMBERS,user,dangerous
-,,Telephony Services,ANSWER_PHONE_CALLS,user,dangerous
-,,Telephony Services,CALL_COMPANION_APP,device,normal
-,,Telephony Services,MANAGE_OWN_CALLS,device,normal
-,,Telephony Services,FOREGROUND_SERVICE_PHONE_CALL,device,normal
-,,Telephony Services,PROCESS_OUTGOING_CALLS,vendor,dangerous
-,,Telephony Services,BIND_SCREENING_SERVICE,device,bindIC
-,,Telephony Services,BIND_TELECOM_CONNECTION_SERVICE,device,bindIC
-,,Telephony Services,BIND_INCALL_SERVICE,device,bindIC
-,,Telephony Services,BIND_CALL_REDIRECTION_SERVICE,device,bindIC
+device,com.apple.developer.calling-app,TelephonyServices,READ_CALL_LOG,vendor,dangerous
+device,com.apple.developer.dialing-app,TelephonyServices,ACCEPT_HANDOVER,user,dangerous
+vendor,com.apple.CommCenter.fine-grained,TelephonyServices,ADD_VOICEMAIL,user,dangerous
+device,com.apple.developer.networking.carrier-constrained.appcategory,TelephonyServices,CALL_PHONE,user,dangerous
+device,com.apple.developer.networking.carrier-constrained.app-optimized,TelephonyServices,WRITE_CALL_LOG,vendor,dangerous
+,,TelephonyServices,READ_PHONE_NUMBERS,user,dangerous
+,,TelephonyServices,ANSWER_PHONE_CALLS,user,dangerous
+,,TelephonyServices,CALL_COMPANION_APP,device,normal
+,,TelephonyServices,MANAGE_OWN_CALLS,device,normal
+,,TelephonyServices,FOREGROUND_SERVICE_PHONE_CALL,device,normal
+,,TelephonyServices,PROCESS_OUTGOING_CALLS,vendor,dangerous
+,,TelephonyServices,BIND_SCREENING_SERVICE,device,bindIC
+,,TelephonyServices,BIND_TELECOM_CONNECTION_SERVICE,device,bindIC
+,,TelephonyServices,BIND_INCALL_SERVICE,device,bindIC
+,,TelephonyServices,BIND_CALL_REDIRECTION_SERVICE,device,bindIC
 vendor,com.apple.developer.networking.vpn.api,VPN,BIND_VPN_SERVICE,device,bindIC
-device,com.apple.developer.networking.wifi-info,Wifi State,ACCESS_WIFI_STATE,device,normal
-vendor,com.apple.developer.automated-device-enrollment.add-devices,Device Management,BIND_DEVICE_ADMIN,,bindIC
-,,Device Management,MANAGE_DEVICE_POLICY_ACCESSIBILITY,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_ACCOUNT_MANAGEMENT,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_ACROSS_USERS,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_ACROSS_USERS_FULL,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_ACROSS_USERS_SECURITY_CRITICAL,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_AIRPLANE_MODE,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_APP_FUNCTIONS,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_APP_RESTRICTIONS,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_APP_USER_DATA,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_APPS_CONTROL,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_ASSIST_CONTENT,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_AUDIO_OUTPUT,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_AUTOFILL,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_BACKUP_SERVICE,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_BLOCK_UNINSTALL,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_BLUETOOTH,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_BUGREPORT,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_CALLS,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_CAMERA,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_CAMERA_TOGGLE,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_CERTIFICATES,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_COMMON_CRITERIA_MODE,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_CONTENT_PROTECTION,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_DEBUGGING_FEATURES,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_DEFAULT_SMS,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_DEVICE_IDENTIFIERS,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_DISPLAY,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_FACTORY_RESET,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_FUN,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_INPUT_METHODS,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_INSTALL_UNKNOWN_SOURCES,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_KEEP_UNINSTALLED_PACKAGES,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_KEYGUARD,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_LOCALE,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_LOCATION,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_LOCK,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_LOCK_CREDENTIALS,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_LOCK_TASK,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_MANAGED_SUBSCRIPTIONS,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_METERED_DATA,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_MICROPHONE,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_MICROPHONE_TOGGLE,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_MOBILE_NETWORK,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_MODIFY_USERS,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_MTE,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_NEARBY_COMMUNICATION,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_NETWORK_LOGGING,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_ORGANIZATION_IDENTITY,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_OVERRIDE_APN,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_PACKAGE_STATE,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_PHYSICAL_MEDIA,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_PRINTING,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_PRIVATE_DNS,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_PROFILE_INTERACTION,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_PROFILES,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_PROXY,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_QUERY_SYSTEM_UPDATES,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_RESET_PASSWORD,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_RESTRICT_PRIVATE_DNS,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_RUN_IN_BACKGROUND,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_RUNTIME_PERMISSIONS,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_SAFE_BOOT,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_SCREEN_CAPTURE,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_SCREEN_CONTENT,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_SECURITY_LOGGING,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_SETTINGS,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_SMS,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_STATUS_BAR,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_SUPPORT_MESSAGE,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_SUSPEND_PERSONAL_APPS,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_SYSTEM_APPS,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_SYSTEM_DIALOGS,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_SYSTEM_UPDATES,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_THREAD_NETWORK,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_TIME,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_USB_DATA_SIGNALLING,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_USB_FILE_TRANSFER,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_USERS,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_VPN,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_WALLPAPER,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_WIFI,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_WINDOWS,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_WIPE_DATA,,devicemanager
-,,Device Management,MANAGE_DEVICE_POLICY_APP_FUNCTIONS,,devicemanager
+device,com.apple.developer.networking.wifi-info,WifiState,ACCESS_WIFI_STATE,device,normal
+vendor,com.apple.developer.automated-device-enrollment.add-devices,DeviceManagement,BIND_DEVICE_ADMIN,,bindIC
+,,DeviceManagement,MANAGE_DEVICE_POLICY_ACCESSIBILITY,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_ACCOUNT_MANAGEMENT,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_ACROSS_USERS,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_ACROSS_USERS_FULL,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_ACROSS_USERS_SECURITY_CRITICAL,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_AIRPLANE_MODE,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_APP_FUNCTIONS,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_APP_RESTRICTIONS,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_APP_USER_DATA,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_APPS_CONTROL,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_ASSIST_CONTENT,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_AUDIO_OUTPUT,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_AUTOFILL,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_BACKUP_SERVICE,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_BLOCK_UNINSTALL,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_BLUETOOTH,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_BUGREPORT,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_CALLS,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_CAMERA,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_CAMERA_TOGGLE,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_CERTIFICATES,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_COMMON_CRITERIA_MODE,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_CONTENT_PROTECTION,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_DEBUGGING_FEATURES,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_DEFAULT_SMS,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_DEVICE_IDENTIFIERS,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_DISPLAY,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_FACTORY_RESET,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_FUN,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_INPUT_METHODS,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_INSTALL_UNKNOWN_SOURCES,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_KEEP_UNINSTALLED_PACKAGES,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_KEYGUARD,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_LOCALE,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_LOCATION,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_LOCK,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_LOCK_CREDENTIALS,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_LOCK_TASK,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_MANAGED_SUBSCRIPTIONS,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_METERED_DATA,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_MICROPHONE,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_MICROPHONE_TOGGLE,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_MOBILE_NETWORK,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_MODIFY_USERS,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_MTE,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_NEARBY_COMMUNICATION,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_NETWORK_LOGGING,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_ORGANIZATION_IDENTITY,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_OVERRIDE_APN,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_PACKAGE_STATE,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_PHYSICAL_MEDIA,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_PRINTING,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_PRIVATE_DNS,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_PROFILE_INTERACTION,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_PROFILES,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_PROXY,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_QUERY_SYSTEM_UPDATES,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_RESET_PASSWORD,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_RESTRICT_PRIVATE_DNS,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_RUN_IN_BACKGROUND,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_RUNTIME_PERMISSIONS,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_SAFE_BOOT,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_SCREEN_CAPTURE,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_SCREEN_CONTENT,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_SECURITY_LOGGING,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_SETTINGS,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_SMS,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_STATUS_BAR,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_SUPPORT_MESSAGE,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_SUSPEND_PERSONAL_APPS,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_SYSTEM_APPS,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_SYSTEM_DIALOGS,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_SYSTEM_UPDATES,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_THREAD_NETWORK,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_TIME,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_USB_DATA_SIGNALLING,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_USB_FILE_TRANSFER,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_USERS,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_VPN,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_WALLPAPER,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_WIFI,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_WINDOWS,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_WIPE_DATA,,devicemanager
+,,DeviceManagement,MANAGE_DEVICE_POLICY_APP_FUNCTIONS,,devicemanager
 user,NSHealthClinicalHealthRecordsShareUsageDescription,Health,BODY_SENSORS,user,dangerous
 user,NSHealthShareUsageDescription,Health,BODY_SENSORS_BACKGROUND,user,dangerous
 user,NSHealthUpdateUsageDescription,Health,FOREGROUND_SERVICE_HEALTH,device,normal
