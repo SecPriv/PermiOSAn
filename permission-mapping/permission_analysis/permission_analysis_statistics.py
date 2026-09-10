@@ -748,6 +748,131 @@ def  plot_permission_cats_per_app_store_category():
     print(global_df['ios_avg_2025'] - global_df['android_avg_2025'])
 
 
+def plot_intent_permissions():
+    with open('data/android_intents_matched_with_permissions_2025.json') as f:
+        data = json.load(f)
+
+    all_categories = set()
+    for app in data:
+        all_categories.update(app.get("common_permissions", {}).keys())
+        all_categories.update(app.get("permission_diffs", {}).keys())
+    all_categories = sorted(list(all_categories))
+
+    #for c in all_categories:
+    #    print(c)
+
+    # Helper to cleanly match comma-separated intent keys (like "Contacts, Media") to permission categories
+    def is_matching_category(intent_key, category):
+        intent_parts = [part.strip().lower().rstrip('s') for part in intent_key.split(',')]
+        cat_clean = category.strip().lower().rstrip('s')
+        return cat_clean in intent_parts
+   
+        category_data = {
+        cat: {"common": 0, "android_only": 0, "ios_only": 0, "android_only_intents_single": 0, "android_only_intents_multiple": 0}
+        for cat in all_categories
+    }
+
+    # Initialize category structure
+    category_data = {
+        cat: {"common": 0, "android_only": 0, "ios_only": 0, "android_only_intent": 0}
+        for cat in all_categories
+    }
+
+    for app in data:
+        common = app.get("common_permissions", {})
+        diffs = app.get("permission_diffs", {})
+        intents = app.get("intents", {})
+        
+        for cat in ["Media", "Camera"]: # "Telephony Services" has no hits
+            has_common = False
+            has_android_only = False
+            has_ios_only = False
+            has_matching_intent = False
+            android_only_intent = False
+            
+            # Calculate common permissions
+            if cat in common:
+                android_perms = common[cat].get("android", [])
+                ios_perms = common[cat].get("ios", [])
+                if android_perms and ios_perms:
+                    has_common = True
+            
+            # Calculate OS-specific differences
+            if cat in diffs:
+                android_perms = diffs[cat].get("android", [])
+                ios_perms = diffs[cat].get("ios", [])
+                if android_perms and not ios_perms:
+                    has_android_only = True
+                elif ios_perms and not android_perms:
+                    has_ios_only = True
+                elif android_perms and ios_perms:
+                    has_common = True
+                    print(f"error: has only ios/android both on {app}")
+            
+            # Calculate matching Android Intents
+            for intent_key, intent_list in intents.items():
+                if intent_key.rstrip('s') == cat.rstrip('s') and intent_list:
+                    android_only_intent = True
+                    break
+            
+            android_only_intent = android_only_intent and not (has_android_only or has_common)
+            
+            # Increment metric totals
+            if has_common:
+                category_data[cat]["common"] += 1
+            if has_android_only:
+                category_data[cat]["android_only"] += 1
+            if has_ios_only:
+                category_data[cat]["ios_only"] += 1
+            if android_only_intent:
+                category_data[cat]["android_only_intent"] += 1
+
+    # for viz
+    categories =  ["Media", "Camera"] #, "Telephony Services"]
+    android = [category_data[cat]["android_only"] for cat in categories]
+    ios = [category_data[cat]["ios_only"] for cat in categories]
+    android_intents = [category_data[cat]["android_only_intent"] for cat in categories]
+    both = [category_data[cat]["common"] for cat in categories]
+
+    df = pd.DataFrame(
+        {'categories': categories,
+        'ios': ios,
+        'android': android,
+        'android_intents': android_intents,
+        'both': both
+        })
+    
+    df = df.sort_values(by=['both'], ascending=True)
+    
+    fig, ax = plt.subplots(figsize=(6.5, 1.35))
+    plt.subplots_adjust(bottom=0.25)
+    w = 0.45
+    x_1 = [i - w/2 for i in range(len(categories))]
+    x_2 = [i + w/2 for i in range(len(categories))]
+    print(x_1, x_2)
+    
+    ax.barh(x_1, df['both'],            height=w, color="#202020", edgecolor="black", label="Both")
+    ax.barh(x_1, df['ios'],             left=df['both'], height=w, color="#CACACA", edgecolor="black", label="iOS")
+    ax.barh(x_2, df['both'],            height=w, color="#202020", edgecolor="black")
+    ax.barh(x_2, df['android'],         left = df['both'], height=w, color="#727272", edgecolor="black", label="Android")
+    ax.barh(x_2, df['android_intents'], left = df['both']+df['android'], height=w, color="#FFFFFF", edgecolor="black", label="Android Intents")
+
+    #plt.title(f"Permissions per Category ({year})")
+    FONTSIZE=11.5
+    plt.xlabel("Number of Apps", fontsize=FONTSIZE)
+    plt.grid(axis='x', linestyle='--', alpha=0.5)
+    ax.set_yticks(range(len(categories)))
+    ax.set_xticks(np.arange(0, 3500, 500))
+    plt.xticks(fontsize=FONTSIZE)
+    ax.set_yticklabels(df['categories'], rotation=45, ha='right', fontsize=FONTSIZE)
+    ax.legend(loc='center left', bbox_to_anchor=(1.02, 0.5), fontsize=FONTSIZE-2, frameon=True)
+    plt.tight_layout()
+    plt.margins(y=0.1, x=0.03)
+    plt.savefig(os.path.join(PLOT_FOLDER_PATH, f"intents_selected_vertical_plot_2025-({DATE}).pdf"), format="pdf", bbox_inches='tight')  
+    #plt.show()
+
+
+
 # Merges common_permissions + permission_diffs, then for each category collects the set of ios_ids that have a non-empty android/ios list, plus total count
 def _agg_get_permission_distribution_android_ios(collection):
     android_sets = defaultdict(set)
@@ -836,4 +961,5 @@ cdf_permission_usage_android_ios()
 plot_top_5_different_categories_per_year()
 plot_permissions_per_category_and_ios_android_per_year()
 plot_permission_cats_per_app_store_category()
+plot_intent_permissions()
 get_avg_permissions_per_app()
