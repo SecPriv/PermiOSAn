@@ -1,3 +1,10 @@
+#!/usr/bin/env -S uv run --script
+#
+# /// script
+# requires-python = ">=3.12"
+# dependencies = ["pandas", "matplotlib", "seaborn", "jinja2"]
+# ///
+
 import os
 import matplotlib.pyplot as plt
 import seaborn as sns
