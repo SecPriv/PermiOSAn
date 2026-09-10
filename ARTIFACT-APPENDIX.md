@@ -224,40 +224,48 @@ List each experiment to execute to reproduce your results. Describe:
  - How much space it consumes on disk (approximately) (omit if <10GB).
  - Which claim and results does it support, and how.
 
-#### Experiment 1: Name
-- Time: replace with estimate in human-minutes/hours + compute-minutes/hours.
-- Storage: replace with estimate for disk space used (omit if <10GB).
+#### Experiment 1: Reproducing Tables and Figures
+- Time: < 10m
+- Storage: <10GB
 
-Provide a short explanation of the experiment and expected results. Describe
-thoroughly the steps to perform the experiment and to collect and organize the
-results as expected from your paper (see example below). Use code segments to
-simplify the workflow, as follows.
+To verify the numbers and measurements presented in the paper's tables and figures,
+run the following scripts **in order** from the `permission_mapping_test/` directory:
 
 ```bash
-python3 experiment_1.py
+cd permission_mapping_test
+python permission_analysis.py
+python process_json.py
+python filter_permission_diffs.py
+python permission_analysis_statistics.py
 ```
 
-#### Experiment 2: Example Name
+> **Note:** Scripts must be run sequentially, as each step depends on the output of the previous one.
 
-- Time: 10 human-minutes + 3 compute-hours
-- Storage: 20GB
 
-This example experiment reproduces
-[Main Result 2: Example Name](#main-result-2-example-name), the following script
-will run the simulation automatically with the different parameters specified in
-the paper. (You may run the following command from the example Docker image.)
+#### Experiment 2: Verifying the Jaccard Similarity
+
+- Time: < 5m
+- Storage: <10GB
+
+To reproduce the Jaccard Similarity scores measuring the degree of overlap between
+XPPCs with shared entities, run the following from the `jaccard_similarity/` directory:
 
 ```bash
-python3 main.py
+cd jaccard_similarity
+python main.py
 ```
 
-Results from this example experiment will be aggregated over several iterations
-by the script and output directly in raw format along with variances and
-standard deviations in the `output-folder/` directory. You will also find there
-the plots for "Figure 1a" in `.pdf` format and the table for "Table 3" in `.tex`
-format. These can be directly compared to the results reported in the paper, and
-should not quantitatively vary by more than 5% from expected results.
+#### Experiment 3: Verifying Cohen's Kappa
+- Time: < 5m
+- Storage: <10GB
 
+To reproduce the Cohen's Kappa inter-rater reliability score for our codebook-based
+permission mapping approach, run the following from the `permission_analysis/` directory:
+
+```bash
+cd permission_analysis
+python calculate_cohens_kappa.py
+```
 
 ## Limitations (Required for Functional and Reproduced badges)
 
