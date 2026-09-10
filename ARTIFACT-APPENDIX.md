@@ -196,16 +196,11 @@ describe the experiments that support your claims in the subsection after that.
 List all your paper's results and claims that are supported by your submitted
 artifacts.
 
-#### Main Result 1: Name
+#### Main Result 1: Reproducing Tables and Figures
 
-Describe the results in 1 to 3 sentences. Mention what the independent and
-dependent variables are; independent variables are the ones on the x-axes of
-your figures, whereas the dependent ones are on the y-axes. By varying the
-independent variable (e.g., file size) in a given manner (e.g., linearly), we
-expect to see trends in the dependent variable (e.g., runtime, communication
-overhead) vary in another manner (e.g., exponentially). Refer to the related
-sections, figures, and/or tables in your paper and reference the experiments
-that support this result/claim. See example below.
+By executing Experiment 1, our Figures 2, 3, 4, and 5, as well as our Tables 
+2, 3, and 6. The respective functions in the script each describe a Figure or 
+Table.
 
 #### Main Result 2: Verifying the Jaccard Similarity
 
