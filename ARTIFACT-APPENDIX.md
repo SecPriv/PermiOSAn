@@ -241,6 +241,8 @@ python permission_analysis_statistics.py
 
 > **Note:** Scripts must be run sequentially, as each step depends on the output of the previous one.
 
+This generates all tables and figures that were used in the paper. 
+The expected result is that the generated figures match the figures from the paper provided in `permission_mapping/permission_analysis/plots_28_07_2026`.
 
 #### Experiment 2: Verifying the Jaccard Similarity
 
@@ -255,6 +257,8 @@ cd jaccard_similarity
 python main.py
 ```
 
+This generates the value of the Jaccard Similarity we provide in Chapter 3.3 `Underlying Permission-Granting Mechanisms`.
+
 #### Experiment 3: Verifying Cohen's Kappa
 - Time: < 5m
 - Storage: <10GB
@@ -266,6 +270,9 @@ permission mapping approach, run the following from the `permission_analysis/` d
 cd permission_analysis
 python calculate_cohens_kappa.py
 ```
+
+This generates the value of the Cohen's Kappa we provide in Chapter 3.2.
+
 
 ## Limitations (Required for Functional and Reproduced badges)
 
