@@ -2,7 +2,7 @@
 #
 # /// script
 # requires-python = ">=3.12"
-# dependencies = ["pandas", "matplotlib"]
+# dependencies = ["pandas==3.0.5", "matplotlib==3.11.1"]
 # ///
 
 import json

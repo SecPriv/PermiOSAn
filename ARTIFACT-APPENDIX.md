@@ -32,9 +32,8 @@ as follows.
 
 1. We tested the artifact on macOS Sequoia 15.7.4 as well as on Ubuntu 24.04.
 2. The artifact was tested using Python 3.12.4. The required python packages are provided in
-   the script files themselves.
-3. TODO Jakob
-4. Datasets required to run our artifact are provided in `permission_mapping/permission_analysis/data`.
+   the script files themselves through the `uv` tool.
+3. Datasets required to run our artifact are provided in `permission_mapping/permission_analysis/data`.
 
 ### Estimated Time and Storage Consumption (Required for Functional and Reproduced badges)
 
@@ -59,35 +58,24 @@ To set up our artifact, first clone it from GitHub:
 git clone git@github.com:SecPriv/PermiOSAn.git
 ```
 
-TODO Jakob
+[Install uv](https://docs.astral.sh/uv/getting-started/installation/), which will manage python and python dependencies for our scripts.
 
 ### Testing the Environment (Required for Functional and Reproduced badges)
 
-Replace the following by a description of the basic functionality tests to check
-if the environment is set up correctly. These tests could be unit tests,
-training an ML model on very low training data, etc. If these tests succeed, all
-required software should be functioning correctly. Use code segments to simplify
-the workflow, e.g.,
+All scripts are stand-alone, the easiest way to check it works is by running the following commands:
 
-Launch the Docker container, attach the current working directory (i.e., run
-from the root of the cloned git repository) as a volume, set the context to be
-that volume, and provide an interactive bash terminal:
-
-```bash
-docker run --rm -it -v ${PWD}:/workspaces/example-docker-python-pip \
-    -w /workspaces/example-docker-python-pip \
-    --entrypoint bash example-docker-python-pip:main
+```sh
+cd permission-mapping
+./calculate_cohens_kappa.py
 ```
 
-Then within the Docker container, run:
+This will run `/usr/bin/env -S uv run --script` as interpreter for the file install dependencies declared in the script block at the top of the file. The expected output is:
 
-```bash
-./test.sh
 ```
-
-Include the expected output.
-
-TODO Jakob
+344
+344
+0.8630337465564738
+```
 
 ## Artifact Evaluation (Required for Functional and Reproduced badges)
 

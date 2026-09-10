@@ -2,7 +2,7 @@
 #
 # /// script
 # requires-python = ">=3.12"
-# dependencies = ["pandas", "matplotlib", "seaborn", "jinja2"]
+# dependencies = ["pandas==3.0.5", "matplotlib==3.11.1", "seaborn==0.13.2", "jinja2==3.1.6"]
 # ///
 
 import os

@@ -2,7 +2,7 @@
 #
 # /// script
 # requires-python = ">=3.12"
-# dependencies = ["scikit-learn"]
+# dependencies = ["scikit-learn==1.9.0"]
 # ///
 
 from sklearn.metrics import cohen_kappa_score

@@ -2,7 +2,7 @@
 #
 # /// script
 # requires-python = ">=3.12"
-# dependencies = ["pandas"]
+# dependencies = ["pandas==3.0.5"]
 # ///
 
 
