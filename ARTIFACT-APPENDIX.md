@@ -38,17 +38,8 @@ as follows.
 
 ### Estimated Time and Storage Consumption (Required for Functional and Reproduced badges)
 
-Replace the following with estimated values for:
-
-- The overall human and compute times required to run the artifact.
-- The overall disk space consumed by the artifact.
-
-This helps reviewers schedule the evaluation in their time plan and others in
-general to see if everything is running as intended. This should also be
-specified at a finer granularity for each experiment (see below).
-
-If your experiments require long compute times (e.g., more than 2 days) consider
-providing experiments with reduced scale, especially for the "Functional" badge.
+- The overall human and compute times required to run the artifact are about 10 minutes.
+- The overall disk space consumed by the artifact is below 1GB.
 
 ## Environment (Required for all badges)
 
