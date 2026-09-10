@@ -8,17 +8,17 @@ import statistics
 import json
 
 DATE = "28-07-2026"
-PLOT_FOLDER_PATH = "./plots_28_07_2026_no_mongo"
+PLOT_FOLDER_PATH = "./plots_28_07_2026_compare"
 os.makedirs(PLOT_FOLDER_PATH, exist_ok=True)
 
 
-with open(f"./data/permission_diffs_2023-filtered-({DATE}).json") as fp:
+with open(f"./permission_diffs_2023-filtered-({DATE}).json") as fp:
     collection_2023 = json.load(fp)
 
-with open(f"./data/permission_diffs_2024-filtered-({DATE}).json") as fp:
+with open(f"./permission_diffs_2024-filtered-({DATE}).json") as fp:
     collection_2024 = json.load(fp)
 
-with open(f"./data/permission_diffs_2025-filtered-({DATE}).json") as fp:
+with open(f"./permission_diffs_2025-filtered-({DATE}).json") as fp:
     collection_2025 = json.load(fp)
 
 

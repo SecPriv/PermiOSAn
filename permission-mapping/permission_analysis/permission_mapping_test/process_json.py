@@ -16,5 +16,5 @@ for YEAR in YEARS:
             "ios_id": item,
         }| js[item]) 
 
-    with open(f"{FILE}_{YEAR}_mongodb_{DATE}.json", "w") as fp:
+    with open(f"{FILE}_{YEAR}_bind_{DATE}.json", "w") as fp:
         json.dump(mongdb_compatible, fp)

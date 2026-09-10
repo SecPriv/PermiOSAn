@@ -26,10 +26,7 @@ for YEAR in YEARS:
     for app_pair in apps:
         
         ios_permissions = set([obj.get("name", None) for obj in app_pair.get("ios_entitlements", [])] + [obj.get("permission", None) for obj in app_pair.get("ios_permissions", [])])
-        android_permissions = set([obj[0].replace("android.permission.", "") if obj != [] else None for obj in app_pair.get("android_permissions", [])])
-  
-        if app_pair.get("ios_id") == "LiveScore":
-            print(app_pair)
+        android_permissions = set([obj[0].replace("android.permission.health.", "").replace("android.permission.", "") if obj != [] else None for obj in app_pair.get("android_permissions", [])])
 
 
         permissions_intersections = copy.deepcopy(blank_dict)
@@ -62,12 +59,10 @@ for YEAR in YEARS:
 
         apps_w_diffs[app_pair["_id"]] = perm_analysis
 
-
     def set_default(obj):
         if isinstance(obj, set):
             return list(obj)
         raise TypeError
-        #print(apps_w_diffs)
     with open(f'./apps_w_diffs_{YEAR}_{DATE}.json', "w") as fp:
         json.dump(apps_w_diffs, fp, default=set_default)
     with open(f'./apps_permission_mapping_stats_{YEAR}_{DATE}.json', "w") as fp:

@@ -67,28 +67,28 @@ def main() -> None:
     DATE = "28-07-2026"
 
     filtered_apps = load(Path("./data/filtered_app_ids-(08-08-2025).json"))
-    perm_diffs_2023  = load(Path(f"./data/matches_w_permissions_2023_bind_({DATE}).json"))
-    perm_diffs_2024  = load(Path(f"./data/matches_w_permissions_2024_bind_({DATE}).json"))
-    perm_diffs_2025  = load(Path(f"./data/matches_w_permissions_2025_bind_({DATE}).json"))
+    perm_diffs_2023  = load(Path(f"./apps_w_diffs_2023_bind_{DATE}.json"))
+    perm_diffs_2024  = load(Path(f"./apps_w_diffs_2024_bind_{DATE}.json"))
+    perm_diffs_2025  = load(Path(f"./apps_w_diffs_2025_bind_{DATE}.json"))
 
     results = aggregate(filtered_apps, perm_diffs_2023, perm_diffs_2024, perm_diffs_2025, "2024", "2025")
-    with open("./data/permission_diffs_2023-filtered-(28-07-2026)_cmp.json", "w") as fp:
+    with open("./permission_diffs_2023-filtered-(28-07-2026).json", "w") as fp:
         json.dump(results, indent=2, fp=fp)
 
-    perm_diffs_2023  = load(Path(f"./data/matches_w_permissions_2023_bind_({DATE}).json"))
-    perm_diffs_2024  = load(Path(f"./data/matches_w_permissions_2024_bind_({DATE}).json"))
-    perm_diffs_2025  = load(Path(f"./data/matches_w_permissions_2025_bind_({DATE}).json"))
+    perm_diffs_2023  = load(Path(f"./apps_w_diffs_2023_bind_{DATE}.json"))
+    perm_diffs_2024  = load(Path(f"./apps_w_diffs_2024_bind_{DATE}.json"))
+    perm_diffs_2025  = load(Path(f"./apps_w_diffs_2025_bind_{DATE}.json"))
     
     results = aggregate(filtered_apps, perm_diffs_2024, perm_diffs_2023, perm_diffs_2025, "2023", "2025")
-    with open("./data/permission_diffs_2024-filtered-(28-07-2026)_cmp.json", "w") as fp:
+    with open("./permission_diffs_2024-filtered-(28-07-2026).json", "w") as fp:
         json.dump(results, indent=2, fp=fp)
 
-    perm_diffs_2023  = load(Path(f"./data/matches_w_permissions_2023_bind_({DATE}).json"))
-    perm_diffs_2024  = load(Path(f"./data/matches_w_permissions_2024_bind_({DATE}).json"))
-    perm_diffs_2025  = load(Path(f"./data/matches_w_permissions_2025_bind_({DATE}).json"))
+    perm_diffs_2023  = load(Path(f"./apps_w_diffs_2023_bind_{DATE}.json"))
+    perm_diffs_2024  = load(Path(f"./apps_w_diffs_2024_bind_{DATE}.json"))
+    perm_diffs_2025  = load(Path(f"./apps_w_diffs_2025_bind_{DATE}.json"))
 
     results = aggregate(filtered_apps, perm_diffs_2025, perm_diffs_2023, perm_diffs_2024, "2024", "2025")
-    with open("./data/permission_diffs_2025-filtered-(28-07-2026)_cmp.json", "w") as fp:
+    with open("./permission_diffs_2025-filtered-(28-07-2026).json", "w") as fp:
         json.dump(results, indent=2, fp=fp)
 
 
