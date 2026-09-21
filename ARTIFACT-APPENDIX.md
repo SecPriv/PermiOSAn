@@ -60,6 +60,8 @@ git clone git@github.com:SecPriv/PermiOSAn.git
 
 [Install uv](https://docs.astral.sh/uv/getting-started/installation/), which will manage python and python dependencies for our scripts.
 
+To remove the dependencies installed by `uv`, run `uv cache clean` and `rm -r "$(uv python dir)"`. To remove `uv` itself, either run `rm ~/.local/bin/uv ~/.local/bin/uvx` or run the appropriate package manager command if one was used to install it.
+
 ### Testing the Environment (Required for Functional and Reproduced badges)
 
 All scripts are stand-alone, the easiest way to check it works is by running the following commands:
