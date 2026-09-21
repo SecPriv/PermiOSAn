@@ -131,10 +131,10 @@ run the following scripts **in order** from the `permission_analysis/` directory
 
 ```bash
 cd permission_analysis
-python permission_analysis.py
-python process_json.py
-python filter_permission_diffs.py
-python permission_analysis_statistics.py
+./permission_analysis.py
+./process_json.py
+./filter_permission_diffs.py
+./permission_analysis_statistics.py
 ```
 
 > **Note:** Scripts must be run sequentially, as each step depends on the output of the previous one.
@@ -151,7 +151,7 @@ To get the numbers of Android-only and iOS-only permissions and verify Table 4 a
 
 ```bash
 cd permission_analysis
-python get_permission_stats_no_mapping.py
+./get_permission_stats_no_mapping.py
 ```
 
 This generates a json file per year with the respective usage stats for Android-only and iOS-only permissions,
@@ -167,7 +167,7 @@ XPPCs with shared entities, run the following from the `jaccard_similarity/` dir
 
 ```bash
 cd jaccard_similarity
-python main.py
+./main.py
 ```
 
 This generates the value of the Jaccard Similarity we provide in Chapter 3.3 `Underlying Permission-Granting Mechanisms`.
@@ -181,7 +181,7 @@ permission mapping approach, run the following from the `permission_analysis/` d
 
 ```bash
 cd permission_analysis
-python calculate_cohens_kappa.py
+./calculate_cohens_kappa.py
 ```
 
 This generates the value of the Cohen's Kappa we provide in Chapter 3.2.
