@@ -62,6 +62,8 @@ git clone git@github.com:SecPriv/PermiOSAn.git
 
 To remove the dependencies installed by `uv`, run `uv cache clean` and `rm -r "$(uv python dir)"`. To remove `uv` itself, either run `rm ~/.local/bin/uv ~/.local/bin/uvx` or run the appropriate package manager command if one was used to install it.
 
+Alternatively, a combined `requirements.txt` file is provided that can be used to install the dependencies in other environments.
+
 ### Testing the Environment (Required for Functional and Reproduced badges)
 
 All scripts are stand-alone, the easiest way to check it works is by running the following commands:
@@ -192,7 +194,7 @@ This generates the value of the Cohen's Kappa we provide in Chapter 3.2.
 ## Limitations (Required for Functional and Reproduced badges)
 
 We provide all extracted data and code to reproduce the figures and numbers in the paper. 
-The app packages are not public, but can be shared on request together with their static analysis scripts.
+The app packages (downloaded from the iOS app store and the Google Play store respectively) are not public, but can be shared on request together with their static analysis scripts.
 
 ## Notes on Reusability (Encouraged for all badges)
 
