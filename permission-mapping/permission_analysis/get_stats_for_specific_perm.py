@@ -1,3 +1,10 @@
+#!/usr/bin/env -S uv run --script
+#
+# /// script
+# requires-python = ">=3.12"
+# ///
+
+
 import json
 
 permission_target = ["READ_MEDIA_VISUAL_USER_SELECTED",
