@@ -27,9 +27,6 @@ The artifact raises no ethical concerns or security/privacy issues.
 
 ### Software Requirements (Required for Functional and Reproduced badges)
 
-Replace this with the software required to run your artifact and its versions,
-as follows.
-
 1. We tested the artifact on macOS Sequoia 15.7.4 as well as on Ubuntu 24.04.
 2. The artifact was tested using Python 3.12.4. The required python packages are provided in
    the script files themselves through the `uv` tool.
@@ -41,10 +38,6 @@ as follows.
 - The overall disk space consumed by the artifact is below 1GB.
 
 ## Environment (Required for all badges)
-
-In the following, describe how to access your artifact and all related and
-necessary data and software components. Afterward, describe how to set up
-everything and how to verify that everything is set up correctly.
 
 ### Accessibility (Required for all badges)
 
@@ -85,9 +78,6 @@ This will run `/usr/bin/env -S uv run --script` as interpreter for the file inst
 
 ### Main Results and Claims
 
-List all your paper's results and claims that are supported by your submitted
-artifacts.
-
 #### Main Result 1: Reproducing Tables and Figures
 
 By executing Experiment 1, our Figures 2, 3, 4, and 5, as well as our Tables 
@@ -119,12 +109,6 @@ group assignments of both coders.
 
 
 ### Experiments
-List each experiment to execute to reproduce your results. Describe:
- - How to execute it in detailed steps.
- - What the expected result is.
- - How long it takes to execute in human and compute times (approximately).
- - How much space it consumes on disk (approximately) (omit if <10GB).
- - Which claim and results does it support, and how.
 
 #### Experiment 1: Reproducing Tables and Figures
 - Time: < 10m
@@ -181,10 +165,10 @@ This generates the value of the Jaccard Similarity we provide in Chapter 3.3 `Un
 - Storage: <10GB
 
 To reproduce the Cohen's Kappa inter-rater reliability score for our codebook-based
-permission mapping approach, run the following from the `permission_analysis/` directory:
+permission mapping approach, run the following from the `permission-mapping/` directory:
 
 ```bash
-cd permission_analysis
+cd permission-mapping
 ./calculate_cohens_kappa.py
 ```
 
