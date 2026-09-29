@@ -417,7 +417,7 @@ def plot_differences_added_removed_across_categories():
     plt.legend(fontsize=16)
     ax.tick_params(axis='x', pad=0)
     plt.margins(x=0.001)
-    plt.savefig(os.path.join(PLOT_FOLDER_PATH, f"differences_added_removed_23_25-({DATE}).pdf"), format="pdf")
+    plt.savefig(os.path.join(PLOT_FOLDER_PATH, f"Figure3-({DATE}).pdf"), format="pdf")
 
 
 # Merges common_permissions + permission_diffs, then for each category collects, the sets of ios_ids that have a non-empty android/ios list
@@ -472,7 +472,7 @@ def jitter_plot_about_permission_occurrences():
         plt.ylim(-1, 16)
         plt.xticks(range(0,17), fontsize=12)
         plt.yticks(range(0,17), fontsize=12)
-        plt.savefig(os.path.join(PLOT_FOLDER_PATH, f"jitter_plot_permission_occurrences_{year}-({DATE}).pdf"), format="pdf")
+        plt.savefig(os.path.join(PLOT_FOLDER_PATH, f"Figure5-{year}-({DATE}).pdf"), format="pdf")
 
     _jitter_plot(_agg_jitter_plot_data(collection_2023), 2023)
     _jitter_plot(_agg_jitter_plot_data(collection_2024), 2024)
@@ -490,8 +490,6 @@ def cdf_permission_usage_android_ios():
         android_c = Counter(android)
         ios_c = Counter(ios)
 
-        print(android_c)
-
         df_android = pd.DataFrame({"_id": android_c.keys(), "android": android_c.values()}).sort_values('_id').reset_index(drop=True)
         df_ios = pd.DataFrame({"_id": ios_c.keys(), "ios": ios_c.values()}).sort_values('_id').reset_index(drop=True)
 
@@ -503,7 +501,11 @@ def cdf_permission_usage_android_ios():
         # CDF
         stats_df['cdf_android'] = stats_df['pdf_android'].cumsum()
         stats_df['cdf_ios'] = stats_df['pdf_ios'].cumsum()
+        
+        print("---------------------------------------------------------")
+        print(f"CDF permission usage in {year}")
         print(stats_df)
+        print("---------------------------------------------------------")
 
         fig, ax = plt.subplots(figsize=(6, 4), dpi=150)
         colors = sns.color_palette("colorblind", 3)
@@ -585,7 +587,9 @@ def plot_top_5_different_categories_per_year():
         global_df[f'ios_{year}_%'] = global_df[f'ios_{year}_%'].round(1)
         global_df
 
+    print("------------TABLE 3------------")
     print(global_df.iloc[:, [0, 1, 3, 2, 4, 5, 6, 8, 7, 9, 10, 11, 13, 12, 14]].to_latex(index=True))
+    print("-------------------------------")
 
 
 def plot_permissions_per_category_and_ios_android_per_year():
@@ -634,7 +638,10 @@ def plot_permissions_per_category_and_ios_android_per_year():
         ax.bar(x_2, df['ios'], bottom=df['both'], width=w, color="#CACACA", edgecolor="black", label="iOS")
         ax.tick_params(axis='x', pad=0)
 
+        print("---------------------------------------------------------")
+        print(f"Permissions per category in {year}")
         print(df)
+        print("---------------------------------------------------------")
 
         plt.ylabel("Number of Apps", fontsize=14)
         plt.grid(axis='y', linestyle='--', alpha=0.5)
@@ -645,7 +652,10 @@ def plot_permissions_per_category_and_ios_android_per_year():
         ax.legend(fontsize=14)
         plt.tight_layout()
         plt.margins(x=0.01)
-        plt.savefig(os.path.join(PLOT_FOLDER_PATH, f"permissions_per_category_{year}-({DATE})-updated.pdf"), format="pdf")
+        if year == "2025":
+            plt.savefig(os.path.join(PLOT_FOLDER_PATH, f"Figure2-({DATE}).pdf"), format="pdf")
+        else:
+            plt.savefig(os.path.join(PLOT_FOLDER_PATH, f"permissions_per_category_{year}-({DATE})-updated.pdf"), format="pdf")
 
     years = {
         "2023": collection_2023,
@@ -690,7 +700,7 @@ def _agg_get_permission_cat_number_and_app_store_category_per_app(collection, me
 
 
 def  plot_permission_cats_per_app_store_category():
-    metadata_lookup = _load_metadata_lookup(f"./data/ios_metadata_2023.json")
+    metadata_lookup = _load_metadata_lookup(f"./data/ios_app_store_category_2023.json")
     if metadata_lookup is None:
         return
 
@@ -742,10 +752,12 @@ def  plot_permission_cats_per_app_store_category():
         df = _bar_plot(cursor, year)
         global_df = pd.concat([global_df, df[['android_avg','ios_avg']].rename(columns={"ios_avg": f"ios_avg_{year}", "android_avg": f"android_avg_{year}"})], axis=1)
 
+    print("------------TABLE 6------------")
     print(global_df.round(decimals=2).iloc[:, [0, 2, 4, 1, 3, 5]].to_latex(index=True))
-    print(global_df.round(decimals=2).to_latex(index=True))
-    print(global_df['ios_avg_2023'] - global_df['android_avg_2023'])
-    print(global_df['ios_avg_2025'] - global_df['android_avg_2025'])
+    print("-------------------------------")
+    #print(global_df.round(decimals=2).to_latex(index=True))
+    #print(global_df['ios_avg_2023'] - global_df['android_avg_2023'])
+    #print(global_df['ios_avg_2025'] - global_df['android_avg_2025'])
 
 
 def plot_intent_permissions():
@@ -868,7 +880,7 @@ def plot_intent_permissions():
     ax.legend(loc='center left', bbox_to_anchor=(1.02, 0.5), fontsize=FONTSIZE-2, frameon=True)
     plt.tight_layout()
     plt.margins(y=0.1, x=0.03)
-    plt.savefig(os.path.join(PLOT_FOLDER_PATH, f"intents_selected_vertical_plot_2025-({DATE}).pdf"), format="pdf", bbox_inches='tight')  
+    plt.savefig(os.path.join(PLOT_FOLDER_PATH, f"Figure4-({DATE}).pdf"), format="pdf", bbox_inches='tight')  
     #plt.show()
 
 
@@ -920,7 +932,9 @@ def get_growth_rate_of_permission_categories_android_vs_ios():
     global_df['ios_growth_total'] = (global_df['ios_2025'] - global_df['ios_2023'])
     global_df['ios_growth_%'] = (((global_df['ios_2025'] - global_df['ios_2023']) / global_df['ios_2023']) * 100).round(1)
     global_df['android_ios_diff'] = global_df['android_growth_total'] - global_df['ios_growth_total']
+    print("------------TABLE 2------------")
     print(global_df.fillna(0).apply(pd.to_numeric, downcast='integer').sort_values('android_ios_diff', ascending=False).to_latex())
+    print("-------------------------------")
 
 
 def get_avg_permissions_per_app():
@@ -950,16 +964,24 @@ def get_avg_permissions_per_app():
         print("---------------------------------------------------------")
 
 
-get_growth_rate_of_permission_categories_android_vs_ios()
+print("############ Tables ############")
+get_growth_rate_of_permission_categories_android_vs_ios() # Table 2
+plot_top_5_different_categories_per_year()                # Table 3
+plot_permission_cats_per_app_store_category()             # Table 6
+print("################################")
+
+print("############ Figures ############")
+plot_permissions_per_category_and_ios_android_per_year()  # Figure 2
+plot_differences_added_removed_across_categories()        # Figure 3
+plot_intent_permissions()                                 # Figure 4
+jitter_plot_about_permission_occurrences()                # Figure 5
+print("#################################")
+
+print("########## Numbers referenced in text ##########")
 get_permission_distribution_of_differences_per_year()
 get_permission_distribution_cdf()
 get_changes_of_permission_diffs()
 get_differences_among_categories()
-plot_differences_added_removed_across_categories()
-jitter_plot_about_permission_occurrences()
 cdf_permission_usage_android_ios()
-plot_top_5_different_categories_per_year()
-plot_permissions_per_category_and_ios_android_per_year()
-plot_permission_cats_per_app_store_category()
-plot_intent_permissions()
 get_avg_permissions_per_app()
+print("################################################")
