@@ -588,7 +588,10 @@ def plot_top_5_different_categories_per_year():
         global_df
 
     print("------------TABLE 3------------")
-    print(global_df.iloc[:, [0, 1, 3, 2, 4, 5, 6, 8, 7, 9, 10, 11, 13, 12, 14]].to_latex(index=True))
+    table_3 = global_df.iloc[:, [0, 1, 3, 2, 4, 5, 6, 8, 7, 9, 10, 11, 13, 12, 14]].to_latex(index=True)
+    print(table_3)
+    with open(os.path.join(PLOT_FOLDER_PATH, f"Table3-({DATE}).txt"), "w") as fp:
+        fp.write(table_3)
     print("-------------------------------")
 
 
@@ -753,7 +756,10 @@ def  plot_permission_cats_per_app_store_category():
         global_df = pd.concat([global_df, df[['android_avg','ios_avg']].rename(columns={"ios_avg": f"ios_avg_{year}", "android_avg": f"android_avg_{year}"})], axis=1)
 
     print("------------TABLE 6------------")
-    print(global_df.round(decimals=2).iloc[:, [0, 2, 4, 1, 3, 5]].to_latex(index=True))
+    table_6 = global_df.round(decimals=2).iloc[:, [0, 2, 4, 1, 3, 5]].to_latex(index=True)
+    print(table_6)
+    with open(os.path.join(PLOT_FOLDER_PATH, f"Table6-({DATE}).txt"), "w") as fp:
+            fp.write(table_6)
     print("-------------------------------")
     #print(global_df.round(decimals=2).to_latex(index=True))
     #print(global_df['ios_avg_2023'] - global_df['android_avg_2023'])
@@ -933,7 +939,10 @@ def get_growth_rate_of_permission_categories_android_vs_ios():
     global_df['ios_growth_%'] = (((global_df['ios_2025'] - global_df['ios_2023']) / global_df['ios_2023']) * 100).round(1)
     global_df['android_ios_diff'] = global_df['android_growth_total'] - global_df['ios_growth_total']
     print("------------TABLE 2------------")
-    print(global_df.fillna(0).apply(pd.to_numeric, downcast='integer').sort_values('android_ios_diff', ascending=False).to_latex())
+    table_2 = global_df.fillna(0).apply(pd.to_numeric, downcast='integer').sort_values('android_ios_diff', ascending=False).to_latex()
+    print(table_2)
+    with open(os.path.join(PLOT_FOLDER_PATH, f"Table2-({DATE}).txt"), "w") as fp:
+        fp.write(table_2)
     print("-------------------------------")
 
 
